@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>美团外卖 - 外卖点餐</title>
+  <script>
+    window.tailwind = { config: {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            mt: '#FFD100',
+            'mt-dark': '#1a1a2e',
+            'mt-card': '#16213e',
+          }
+        }
+      }
+    }};
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+    * { font-family: 'Noto Sans SC', -apple-system, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f5f5f5; }
+    .dark body, .dark { background: #1a1a2e; }
+
+    .scroll-hide::-webkit-scrollbar { display: none; }
+    .scroll-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes bounceIn {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.05); }
+      70% { transform: scale(0.9); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    @keyframes slideRight {
+      from { transform: translateX(-20px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .animate-slide-up { animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+    .animate-fade-in { animation: fadeIn 0.3s ease; }
+    .animate-pop-in { animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .animate-bounce-in { animation: bounceIn 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+    .animate-slide-right { animation: slideRight 0.3s ease; }
+
+    .cart-badge {
+      animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dish-card:active { transform: scale(0.98); transition: transform 0.1s; }
+    .btn-press:active { transform: scale(0.95); transition: transform 0.1s; }
+
+    .overlay {
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(2px);
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    .dark .skeleton {
+      background: linear-gradient(90deg, #16213e 25%, #1a1a2e 50%, #16213e 75%);
+      background-size: 200% 100%;
+    }
+
+    .status-line::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 28px;
+      bottom: -4px;
+      width: 2px;
+      background: #e5e5e5;
+    }
+    .dark .status-line::before { background: #333; }
+    .status-line.active::before { background: #FFD100; }
+    .status-line:last-child::before { display: none; }
+
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn 0.25s ease; }
+  </style>
+</head>
+<body class="min-h-screen max-w-lg mx-auto bg-white dark:bg-mt-dark transition-colors duration-300 relative">
+
+  <!-- ========== 首页 ========== -->
+  <div id="page-home" class="page active pb-20">
+    <!-- 顶栏 -->
+    <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800">
+      <div class="flex items-center gap-3 px-4 py-3">
+        <div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-2 flex-1">
+          <i class="fas fa-search text-gray-400 text-sm"></i>
+          <input id="searchInput" type="text" placeholder="搜索商家或菜品" class="bg-transparent text-sm flex-1 outline-none dark:text-white dark:placeholder-gray-500">
+        </div>
+        <button onclick="toggleDark()" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400">
+          <i class="fas fa-moon dark:hidden text-sm"></i>
+          <i class="fas fa-sun hidden dark:inline text-sm"></i>
+        </button>
+      </div>
+      <!-- 分类 -->
+      <div class="flex gap-1 px-3 pb-2 overflow-x-auto scroll-hide">
+        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-mt text-black" data-cat="all">全部</button>
+        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="中餐">🍚 中餐</button>
+        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="快餐">🍔 快餐</button>
+        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="奶茶">🧋 奶茶</button>
+        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="火锅">🍲 火锅</button>
+        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="日料">🍣 日料</button>
+        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="烧烤">🍖 烧烤</button>
+        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="甜品">🍰 甜品</button>
+      </div>
+    </div>
+    <!-- 横幅 -->
+    <div class="px-4 mt-3">
+      <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-4 flex items-center justify-between text-white relative overflow-hidden">
+        <div>
+          <div class="text-lg font-bold">新用户专享</div>
+          <div class="text-sm opacity-90 mt-1">首单立减 ¥15</div>
+        </div>
+        <div class="text-5xl opacity-30 absolute right-3">🎉</div>
+      </div>
+    </div>
+    <!-- 商家列表 -->
+    <div class="px-4 mt-4">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-bold dark:text-white">附近商家</h2>
+        <div class="flex gap-2">
+          <button class="sort-btn text-xs text-gray-500 dark:text-gray-400 bg-mt text-black px-2 py-1 rounded" data-sort="rating">评分最高</button>
+          <button class="sort-btn text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded" data-sort="sales">销量最高</button>
+          <button class="sort-btn text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded" data-sort="time">最快送达</button>
+        </div>
+      </div>
+      <div id="restaurantList" class="space-y-3"></div>
+    </div>
+  </div>
+
+  <!-- ========== 商家详情 ========== -->
+  <div id="page-restaurant" class="page pb-20">
+    <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark">
+      <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+        <button data-back="home" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center btn-press">
+          <i class="fas fa-arrow-left text-gray-600 dark:text-gray-300 text-sm"></i>
+        </button>
+        <span class="font-bold dark:text-white" id="restoName">商家详情</span>
+      </div>
+    </div>
+    <!-- 商家头图 -->
+    <div id="restoHeader" class="h-44 bg-gradient-to-br from-yellow-400 to-orange-500 relative"></div>
+    <!-- 商家信息 -->
+    <div class="px-4 py-3 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800 -mt-6 rounded-t-2xl relative z-10">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-xl font-bold dark:text-white" id="restoTitle"></h2>
+          <div class="flex items-center gap-2 mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <span class="text-yellow-500">★</span><span id="restoRating"></span>
+            <span>月售<span id="restoSales"></span></span>
+          </div>
+        </div>
+        <span class="text-xs text-green-600 bg-green-50 dark:bg-green-900/30 dark:text-green-400 px-2 py-1 rounded">商家自配</span>
+      </div>
+      <div class="flex gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+        <span id="restoTime"></span>
+        <span id="restoFee"></span>
+        <span>起送¥<span id="restoMin"></span></span>
+      </div>
+    </div>
+    <!-- 菜单分类标签 -->
+    <div class="sticky top-14 z-20 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800">
+      <div id="menuTabs" class="flex px-4 overflow-x-auto scroll-hide gap-0"></div>
+    </div>
+    <!-- 菜单列表 -->
+    <div id="menuList" class="px-4 py-3 space-y-4"></div>
+    <!-- 底部购物车条 -->
+    <div id="cartBar" class="fixed bottom-16 left-0 right-0 max-w-lg mx-auto bg-gray-900 dark:bg-gray-800 text-white px-4 py-3 flex items-center gap-3 z-20 cursor-pointer" onclick="toggleCart()">
+      <div class="relative">
+        <div class="w-11 h-11 rounded-full bg-mt flex items-center justify-center text-black font-bold text-lg">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <span id="cartCountBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold hidden cart-badge">0</span>
+      </div>
+      <div class="flex-1">
+        <span id="cartTotal" class="font-bold text-lg">¥0.00</span>
+        <span class="text-gray-400 text-xs ml-2">另需配送费</span>
+      </div>
+      <button id="checkoutBtn" class="bg-mt text-black font-bold px-5 py-2 rounded-full text-sm disabled:opacity-50 disabled:cursor-not-allowed btn-press" disabled onclick="event.stopPropagation(); navigate('checkout')">去结算</button>
+    </div>
+  </div>
+
+  <!-- ========== 购物车抽屉 ========== -->
+  <div id="cartOverlay" class="fixed inset-0 z-40 overlay hidden" onclick="toggleCart()"></div>
+  <div id="cartDrawer" class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto z-50 bg-white dark:bg-mt-dark rounded-t-2xl shadow-2xl transform translate-y-full transition-transform duration-300" style="max-height: 60vh;">
+    <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+      <h3 class="font-bold dark:text-white">购物车</h3>
+      <button onclick="clearCart()" class="text-xs text-gray-400">清空</button>
+    </div>
+    <div id="cartItems" class="px-4 py-2 overflow-y-auto" style="max-height: calc(60vh - 120px);"></div>
+    <div class="px-4 py-3 border-t border-gray-100 dark:border-gray-800">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm text-gray-500 dark:text-gray-400">小计</span>
+        <span class="font-bold text-lg dark:text-white" id="cartSubtotal">¥0.00</span>
+      </div>
+      <span class="text-xs text-gray-400">不含配送费</span>
+    </div>
+  </div>
+
+  <!-- ========== 结算页 ========== -->
+  <div id="page-checkout" class="page pb-20">
+    <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800">
+      <div class="flex items-center gap-3 px-4 py-3">
+        <button data-back="restaurant" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center btn-press">
+          <i class="fas fa-arrow-left text-gray-600 dark:text-gray-300 text-sm"></i>
+        </button>
+        <span class="font-bold dark:text-white">确认订单</span>
+      </div>
+    </div>
+    <div class="px-4 py-4 space-y-4">
+      <!-- 地址 -->
+      <div class="bg-white dark:bg-mt-card p-4 rounded-xl border border-gray-100 dark:border-gray-800">
+        <div class="flex items-center gap-2 mb-2"><i class="fas fa-map-marker-alt text-mt"></i><span class="font-medium dark:text-white">送至</span></div>
+        <div class="text-sm text-gray-600 dark:text-gray-300">上海市浦东新区张江高科技园区 3号楼 1201室</div>
+      </div>
+      <!-- 订单明细 -->
+      <div class="bg-white dark:bg-mt-card p-4 rounded-xl border border-gray-100 dark:border-gray-800">
+        <h3 class="font-bold mb-3 dark:text-white">订单明细</h3>
+        <div id="checkoutItems" class="space-y-2 text-sm"></div>
+        <div class="border-t border-gray-100 dark:border-gray-700 mt-3 pt-3 space-y-1 text-sm">
+          <div class="flex justify-between text-gray-500 dark:text-gray-400"><span>商品小计</span><span id="checkoutSubtotal"></span></div>
+          <div class="flex justify-between text-gray-500 dark:text-gray-400"><span>配送费</span><span>¥5.00</span></div>
+          <div class="flex justify-between font-bold text-lg dark:text-white mt-2 pt-2 border-t border-gray-100 dark:border-gray-700"><span>实付</span><span id="checkoutTotal"></span></div>
+        </div>
+      </div>
+      <!-- 备注 -->
+      <div class="bg-white dark:bg-mt-card p-4 rounded-xl border border-gray-100 dark:border-gray-800">
+        <div class="flex items-center gap-2"><i class="fas fa-edit text-gray-400"></i><input type="text" placeholder="订单备注（选填）" class="flex-1 text-sm outline-none dark:bg-transparent dark:text-white dark:placeholder-gray-500"></div>
+      </div>
+      <!-- 提交 -->
+      <button onclick="placeOrder()" class="w-full bg-mt text-black font-bold py-3.5 rounded-xl text-lg btn-press hover:bg-yellow-500 transition-colors">
+        提交订单
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== 订单追踪 ========== -->
+  <div id="page-tracking" class="page pb-20">
+    <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800">
+      <div class="flex items-center gap-3 px-4 py-3">
+        <button data-back="orders" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center btn-press">
+          <i class="fas fa-arrow-left text-gray-600 dark:text-gray-300 text-sm"></i>
+        </button>
+        <span class="font-bold dark:text-white">订单追踪</span>
+      </div>
+    </div>
+    <div class="px-4 py-6 text-center">
+      <!-- 骑手信息 -->
+      <div class="bg-white dark:bg-mt-card p-4 rounded-xl border border-gray-100 dark:border-gray-800 mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-14 h-14 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-2xl">🛵</div>
+          <div class="text-left">
+            <div class="font-bold dark:text-white">骑手正在赶来</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">预计送达: <span id="trackingETA" class="text-mt font-bold"></span></div>
+          </div>
+          <button class="ml-auto bg-mt text-black font-bold px-4 py-2 rounded-full text-sm btn-press">联系骑手</button>
+        </div>
+      </div>
+      <!-- 状态 -->
+      <div id="trackingSteps" class="space-y-0 text-left"></div>
+    </div>
+  </div>
+
+  <!-- ========== 订单列表 ========== -->
+  <div id="page-orders" class="page pb-20">
+    <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800">
+      <div class="px-4 py-3">
+        <h2 class="text-lg font-bold dark:text-white">我的订单</h2>
+      </div>
+    </div>
+    <div id="orderList" class="px-4 py-4 space-y-3"></div>
+  </div>
+
+  <!-- ========== 底部导航 ========== -->
+  <nav class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white dark:bg-mt-dark border-t border-gray-100 dark:border-gray-800 z-30 flex">
+    <button onclick="navigate('home')" class="nav-btn flex-1 flex flex-col items-center py-2 text-xs gap-1 text-gray-400 dark:text-gray-500 hover:text-mt transition-colors" data-page="home">
+      <i class="fas fa-home text-lg"></i><span>首页</span>
+    </button>
+    <button onclick="navigate('orders')" class="nav-btn flex-1 flex flex-col items-center py-2 text-xs gap-1 text-gray-400 dark:text-gray-500 hover:text-mt transition-colors" data-page="orders">
+      <i class="fas fa-file-alt text-lg"></i><span>订单</span>
+    </button>
+    <button onclick="navigate('home')" class="nav-btn flex-1 flex flex-col items-center py-2 text-xs gap-1 text-gray-400 dark:text-gray-500 hover:text-mt transition-colors" data-page="me">
+      <i class="fas fa-user text-lg"></i><span>我的</span>
+    </button>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+</html>
