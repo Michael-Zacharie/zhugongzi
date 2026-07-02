@@ -1,15 +1,20 @@
 <!DOCTYPE html><html lang="zh-CN" class="">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>美团外卖 - 江苏大学</title>
-<script>window.tailwind={config:{darkMode:'class',theme:{extend:{colors:{mt:'#FFD100','mt-dark':'#1a1a2e','mt-card':'#16213e'}}}}};</script>
+<title>朱公子的餐厅 · 美食订餐</title>
+<script>window.tailwind={config:{darkMode:'class',theme:{extend:{colors:{mt:'#FF6B35','mt-dark':'#1a1a2e','mt-card':'#16213e'}}}}};</script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 *{font-family:'PingFang SC','Microsoft YaHei','Hiragino Sans GB',-apple-system,sans-serif;margin:0;padding:0;box-sizing:border-box}
-body{background:#f5f5f5}
+html{background:url('bg.jpg') fixed center/cover no-repeat}
+body::after{content:'';position:fixed;inset:0;z-index:0;background:rgba(255,255,255,.3);pointer-events:none}
+.dark body::after{background:rgba(26,26,46,.65)}
 .scroll-hide::-webkit-scrollbar{display:none}
-.scroll-hide{-ms-overflow-style:none;scrollbar-width:none}
+.scroll-hide{-ms-overflow-style:none;scrollbar-width:none;-webkit-overflow-scrolling:touch;overflow-x:scroll;flex-wrap:nowrap}
+#recommendList::-webkit-scrollbar{height:6px}
+#recommendList::-webkit-scrollbar-track{background:#eee;border-radius:3px}
+#recommendList::-webkit-scrollbar-thumb{background:#FF6B35;border-radius:3px}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes popIn{0%{transform:scale(.9);opacity:0}100%{transform:scale(1);opacity:1}}
@@ -22,20 +27,54 @@ body{background:#f5f5f5}
 .page.active{display:block;animation:fadeIn .2s ease}
 .status-line::before{content:'';position:absolute;left:9px;top:32px;bottom:-8px;width:2px;background:#e5e5e5}
 .dark .status-line::before{background:#333}
-.status-line.active::before{background:#FFD100}
+.status-line.active::before{background:#FF6B35}
 .status-line:last-child::before{display:none}
-.nav-btn.active-nav{color:#FFD100!important}
+.nav-btn.active-nav{color:#FF6B35!important}
 .coupon-card{background:linear-gradient(135deg,#fff9e6 0%,#fff3cc 100%)}
 .dark .coupon-card{background:linear-gradient(135deg,#2d2410 0%,#3d2e14 100%)}
 .food-img{object-fit:cover;width:100%;height:100%;border-radius:inherit}
 .chat-fab{animation:shake 3s infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-20px) rotate(2deg)}}
 @keyframes toastIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes toastOut{from{transform:translateY(0);opacity:1}to{transform:translateY(20px);opacity:0}}
 .toast-show{animation:toastIn .3s ease forwards}
 .toast-hide{animation:toastOut .3s ease forwards}
+/* === 美化增强 === */
+.restaurant-card{transition:transform .2s ease,box-shadow .2s ease;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.restaurant-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.12)}
+.restaurant-card:active{transform:scale(.97)}
+@keyframes shimmer{0%{background-position:-200px 0}100%{background-position:200px 0}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,.4)}50%{box-shadow:0 0 0 8px rgba(255,107,53,0)}}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.hero-banner{background:linear-gradient(135deg,#FF6B35,#ff8c5a,#FF6B35,#ff7043);background-size:300% 300%;animation:gradientShift 6s ease infinite}
+.pulse-dot{animation:pulseGlow 2s infinite}
+.menu-item{transition:transform .15s ease,background .2s ease}
+.menu-item:active{transform:scale(.98);background:rgba(255,107,53,.04)}
+.section-title{position:relative;display:inline-block}
+.section-title::after{content:'';position:absolute;bottom:-4px;left:0;width:40%;height:3px;background:#FF6B35;border-radius:2px}
+.nav-btn{transition:color .2s ease,transform .15s ease}
+.nav-btn:active{transform:scale(.9)}
+.order-card{transition:transform .2s ease,box-shadow .2s ease;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.order-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.1)}
+@keyframes bounceIn{0%{transform:scale(0);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.badge-hot{animation:pulseGlow 2s infinite}
+input:focus{box-shadow:0 0 0 3px rgba(255,107,53,.15)!important;border-color:#FF6B35!important}
+.dark input:focus{box-shadow:0 0 0 3px rgba(255,107,53,.25)!important}
+.cat-btn{transition:all .2s ease}
+.sort-btn{transition:all .2s ease}
+@keyframes confetti{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(-60px) rotate(360deg);opacity:0}}
+.toast-confetti{animation:confetti .6s ease-out forwards}
 </style>
 </head>
 <body class="min-h-screen max-w-lg mx-auto bg-white dark:bg-mt-dark transition-colors relative">
+<div class="fixed z-40" style="bottom:100px;right:max(16px,calc(50% - 240px))">
+  <div onclick="toggleChat()" style="animation:float 4s ease-in-out infinite;cursor:pointer">
+    <div style="width:70px;height:70px;border-radius:50%;overflow:hidden;border:3px solid #FF6B35;box-shadow:0 6px 24px rgba(255,107,53,.5)">
+      <img src="avatar.jpg" style="width:100%;height:100%;object-fit:cover">
+    </div>
+    <div style="text-align:center;font-size:11px;font-weight:bold;color:#FF6B35;margin-top:2px;text-shadow:0 1px 2px rgba(255,255,255,.8)">朱公子</div>
+  </div>
+</div>
 
 <!-- ===== 首页 ===== -->
 <div id="page-home" class="page active pb-24">
@@ -97,15 +136,15 @@ body{background:#f5f5f5}
   </div>
   <div class="px-4 mt-2"><div class="flex gap-2 overflow-x-auto scroll-hide pb-1" id="couponBanner"></div></div>
   <div class="px-4 mt-2">
-    <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-4 text-white relative overflow-hidden cursor-pointer" onclick="navigate('coupons')">
-      <div class="text-lg font-bold">🎓 江大后街美食</div><div class="text-sm opacity-90 mt-1">东风步行街 · 新用户首单立减 ¥15</div>
+    <div class="hero-banner rounded-xl p-4 text-white relative overflow-hidden cursor-pointer" onclick="navigate('coupons')">
+      <div class="text-lg font-bold">🎓 发现身边美味</div><div class="text-sm opacity-90 mt-1">新用户首单立减 ¥15</div>
       <div class="text-5xl opacity-30 absolute right-3 bottom-1">🛵</div>
     </div>
   </div>
-  <div class="px-4 mt-4" id="recommendSection"><h2 class="text-lg font-bold dark:text-white mb-3">🔥 为你推荐</h2><div class="flex gap-3 overflow-x-auto scroll-hide pb-2" id="recommendList"></div></div>
+  <div class="px-4 mt-4" id="recommendSection"><h2 class="text-lg font-bold dark:text-white mb-3 section-title">🔥 为你推荐</h2><div class="flex gap-3 overflow-x-auto pb-2" id="recommendList" style="scrollbar-width:thin;scrollbar-color:#FF6B35 #eee"></div></div>
   <div class="px-4 mt-4">
     <div class="flex items-center justify-between mb-3">
-      <h2 class="text-lg font-bold dark:text-white">附近商家</h2>
+      <h2 class="text-lg font-bold dark:text-white section-title">附近商家</h2>
       <div class="flex gap-1.5">
         <button class="sort-btn text-xs px-2.5 py-1.5 rounded-full font-bold bg-mt text-black" data-sort="distance">距离最近</button>
         <button class="sort-btn text-xs px-2.5 py-1.5 rounded-full font-medium bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400" data-sort="rating">评分最高</button>
@@ -287,11 +326,11 @@ body{background:#f5f5f5}
           <i class="fas fa-moon text-purple-500"></i><span class="text-sm dark:text-white flex-1">深色模式</span><div class="w-10 h-5 rounded-full bg-gray-300 dark:bg-mt relative cursor-pointer mr-2" onclick="event.stopPropagation();toggleDark()"><div class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white dark:translate-x-5 transition-transform shadow"></div></div>
         </div>
         <div class="px-4 py-3.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-          <i class="fas fa-info-circle text-gray-400"></i><span class="text-sm dark:text-white flex-1">关于美团外卖江大版</span><span class="text-xs text-gray-400 mr-2">v2.0</span><i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+          <i class="fas fa-info-circle text-gray-400"></i><span class="text-sm dark:text-white flex-1">关于朱公子的餐厅</span><span class="text-xs text-gray-400 mr-2">v2.0</span><i class="fas fa-chevron-right text-gray-300 text-xs"></i>
         </div>
       </div>
     </div>
-    <div class="text-center text-xs text-gray-400 py-4">美团外卖 · 江苏大学版 · Made with ❤️</div>
+    <div class="text-center text-xs text-gray-400 py-4">朱公子的餐厅 · Made with ❤️</div>
   </div>
 </div>
 
@@ -353,15 +392,10 @@ body{background:#f5f5f5}
 </div>
 
 <!-- ===== 智能客服 ===== -->
-<div class="fixed z-40" style="bottom:80px;right:max(16px,calc(50% - 240px))">
-  <button onclick="toggleChat()" class="w-14 h-14 rounded-full bg-mt text-black shadow-lg flex flex-col items-center justify-center btn-press chat-fab border-2 border-white dark:border-gray-700">
-    <i class="fas fa-headset text-xl"></i><span class="text-xs font-bold leading-none">客服</span>
-  </button>
-</div>
 <div id="chatOverlay" class="fixed inset-0 z-50 overlay hidden" onclick="toggleChat()"></div>
 <div id="chatWindow" class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto z-50 bg-white dark:bg-mt-dark rounded-t-2xl shadow-2xl transform translate-y-full transition-transform duration-300" style="height:70vh">
   <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800 bg-mt">
-    <div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-sm">🤖</div><div><div class="text-sm font-bold text-black">美团智能客服</div><div class="text-xs text-black/60">在线 · 秒回复</div></div></div>
+    <div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-sm">🤖</div><div><div class="text-sm font-bold text-black">朱公子智能客服</div><div class="text-xs text-black/60">在线 · 秒回复</div></div></div>
     <button onclick="toggleChat()" class="w-7 h-7 rounded-full bg-black/10 flex items-center justify-center text-black"><i class="fas fa-times text-sm"></i></button>
   </div>
   <div class="flex-1 overflow-y-auto p-4 space-y-3" id="chatMessages" style="height:calc(70vh - 140px)"></div>
@@ -391,8 +425,20 @@ body{background:#f5f5f5}
 
 <script>
 // ===== 图片 =====
-function foodImg(id){var m={'1':'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=200&h=200&fit=crop','2':'https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=200&h=200&fit=crop','3':'https://images.unsplash.com/photo-1558857563-b371033873b8?w=200&h=200&fit=crop','4':'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=200&h=200&fit=crop','5':'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=200&h=200&fit=crop','6':'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&h=200&fit=crop','7':'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop','8':'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=200&h=200&fit=crop'};return m[id]||m['1'];}
-function restoImg(id){return foodImg(id).replace('200&h=200','400&h=200');}
+function foodImg(id){var u='https://images.unsplash.com/photo-',w='?w=300&h=300&fit=crop',m={};function p(i,k){m[i]=u+k+w;}
+// 19张全部验证通过的Unsplash食物图片
+var V=['1582878826629-29b7ad1cdc43','1617196034796-73dfa7b1fd56','1558857563-b371033873b8','1569718212165-3a8278d5f624','1579871494447-9811cf80d66c','1555939594-58d7cb561ad1','1565299624946-b28f40a0ae38','1563245372-f21724e3856d','1555126634-323283e090fa','1504674900247-0877df9cc836','1455619452474-d2be8b1e70cd','1476224203421-9ac39bcb3327','1506354666786-959d6d497f1a','1565299585323-38d6b0865b47','1546069901-ba9599a7e63c','1563379926898-05f4575a45d8','1484723091739-30a097e8f929','1414235077428-338989a2e8c0','1496116218417-1a781b1c416c'];
+p('1',V[0]);p('2',V[8]);p('3',V[2]);p('4',V[7]);p('5',V[4]);p('6',V[5]);p('7',V[6]);p('8',V[10]);
+p(101,V[0]);p(102,V[10]);p(103,V[7]);p(104,V[17]);p(105,V[17]);p(106,V[16]);p(107,V[2]);
+p(201,V[8]);p(202,V[1]);p(203,V[9]);p(204,V[10]);p(205,V[9]);p(206,V[18]);p(207,V[15]);p(208,V[3]);
+p(301,V[2]);p(302,V[12]);p(303,V[16]);p(304,V[13]);p(305,V[14]);p(306,V[18]);p(307,V[15]);p(308,V[11]);
+p(401,V[17]);p(402,V[0]);p(403,V[7]);p(404,V[10]);p(405,V[9]);p(406,V[14]);p(407,V[12]);p(408,V[15]);
+p(501,V[4]);p(502,V[1]);p(503,V[15]);p(504,V[11]);p(505,V[1]);p(506,V[12]);p(507,V[16]);p(508,V[18]);
+p(601,V[5]);p(602,V[9]);p(603,V[1]);p(604,V[15]);p(605,V[5]);p(606,V[7]);p(607,V[0]);p(608,V[14]);
+p(701,V[6]);p(702,V[11]);p(703,V[12]);p(704,V[13]);p(705,V[12]);p(706,V[14]);p(707,V[17]);
+p(801,V[7]);p(802,V[9]);p(803,V[0]);p(804,V[10]);p(805,V[3]);p(806,V[17]);p(807,V[15]);
+return m[id]||m['101'];}
+function restoImg(id){return foodImg(id).replace('300&h=300','400&h=200');}
 
 // ===== 地址 =====
 function getAddress(){var s=localStorage.getItem('mt_address');if(s)try{return JSON.parse(s)}catch(e){}return{addr:'江苏省镇江市学府路301号',detail:'',contact:'',phone:''};}
@@ -423,125 +469,125 @@ var restaurants=[
   {id:1,name:'爱辣啵啵鱼',category:'中餐',rating:4.9,monthlySales:5230,deliveryTime:'30分钟',deliveryFee:'免配送费',minPrice:20,distance:350,avgPrice:30,cover:'bg-gradient-to-br from-red-600 to-orange-500',emoji:'🐟',coverImg:restoImg('1'),tags:['江大必吃榜','后街人气王'],coupons:[{discount:5,desc:'满¥30减5'}],
     menu:[
       {cat:'招牌锅底',items:[
-        {id:101,name:'香格里辣啵啵鱼',price:32,sales:2867,desc:'招牌麻辣味，巴沙鱼片+豆芽+豆腐，汤汁浓郁',foodImg:foodImg('1')},
-        {id:102,name:'番茄啵啵鱼',price:30,sales:1987,desc:'酸甜番茄汤底，鱼肉嫩滑，配金针菇',foodImg:foodImg('1')},
-        {id:103,name:'藤椒啵啵鱼',price:34,sales:1678,desc:'藤椒清香麻辣，巴沙鱼+宽粉+木耳',foodImg:foodImg('1')},
-        {id:104,name:'酸菜啵啵鱼',price:33,sales:1456,desc:'老坛酸菜+嫩鱼片，酸辣开胃',foodImg:foodImg('1')},
+        {id:101,name:'香格里辣啵啵鱼',price:32,sales:2867,desc:'招牌麻辣味，巴沙鱼片+豆芽+豆腐，汤汁浓郁',foodImg:foodImg('101')},
+        {id:102,name:'番茄啵啵鱼',price:30,sales:1987,desc:'酸甜番茄汤底，鱼肉嫩滑，配金针菇',foodImg:foodImg('102')},
+        {id:103,name:'藤椒啵啵鱼',price:34,sales:1678,desc:'藤椒清香麻辣，巴沙鱼+宽粉+木耳',foodImg:foodImg('103')},
+        {id:104,name:'酸菜啵啵鱼',price:33,sales:1456,desc:'老坛酸菜+嫩鱼片，酸辣开胃',foodImg:foodImg('104')},
       ]},
       {cat:'配菜主食',items:[
-        {id:105,name:'手工米饭',price:2,sales:5678,desc:'东北大米，粒粒分明',foodImg:foodImg('4')},
-        {id:106,name:'红糖冰粉',price:8,sales:3456,desc:'手工冰粉+红糖花生碎，解辣神器',foodImg:foodImg('1')},
-        {id:107,name:'酸梅汤',price:6,sales:4231,desc:'冰镇解辣，酸甜可口',foodImg:foodImg('1')},
+        {id:105,name:'手工米饭',price:2,sales:5678,desc:'东北大米，粒粒分明',foodImg:foodImg('105')},
+        {id:106,name:'红糖冰粉',price:8,sales:3456,desc:'手工冰粉+红糖花生碎，解辣神器',foodImg:foodImg('106')},
+        {id:107,name:'酸梅汤',price:6,sales:4231,desc:'冰镇解辣，酸甜可口',foodImg:foodImg('107')},
       ]},
     ]
   },
   {id:2,name:'超越火锅鸡',category:'火锅',rating:4.8,monthlySales:4456,deliveryTime:'35分钟',deliveryFee:'¥3',minPrice:25,distance:520,avgPrice:68,cover:'bg-gradient-to-br from-red-700 to-red-400',emoji:'🍗',coverImg:restoImg('2'),tags:['网红店','超高性价比'],coupons:[{discount:10,desc:'满¥80减10'}],
     menu:[
       {cat:'火锅鸡套餐',items:[
-        {id:201,name:'经典火锅鸡(双人)',price:68,sales:3456,desc:'整鸡切块+秘制酱料，蔬菜自助',foodImg:foodImg('2')},
-        {id:202,name:'火锅鸡(三人)',price:98,sales:2678,desc:'分量升级，宿舍聚餐首选',foodImg:foodImg('2')},
-        {id:203,name:'火锅鸡+排骨锅',price:108,sales:1567,desc:'双拼锅底，鸡+排骨超满足',foodImg:foodImg('2')},
-        {id:204,name:'火锅鸡+牛蛙锅',price:118,sales:1234,desc:'嫩滑牛蛙遇上秘制鸡锅',foodImg:foodImg('2')},
+        {id:201,name:'经典火锅鸡(双人)',price:68,sales:3456,desc:'整鸡切块+秘制酱料，蔬菜自助',foodImg:foodImg('201')},
+        {id:202,name:'火锅鸡(三人)',price:98,sales:2678,desc:'分量升级，宿舍聚餐首选',foodImg:foodImg('202')},
+        {id:203,name:'火锅鸡+排骨锅',price:108,sales:1567,desc:'双拼锅底，鸡+排骨超满足',foodImg:foodImg('203')},
+        {id:204,name:'火锅鸡+牛蛙锅',price:118,sales:1234,desc:'嫩滑牛蛙遇上秘制鸡锅',foodImg:foodImg('204')},
       ]},
       {cat:'加菜涮品',items:[
-        {id:205,name:'肥牛卷',price:22,sales:2987,desc:'进口肥牛，涮30秒最佳',foodImg:foodImg('2')},
-        {id:206,name:'虾滑',price:18,sales:2345,desc:'手打虾滑，Q弹鲜甜',foodImg:foodImg('2')},
-        {id:207,name:'蔬菜拼盘',price:12,sales:3456,desc:'时令鲜蔬，六种搭配',foodImg:foodImg('2')},
-        {id:208,name:'手工面条',price:6,sales:2345,desc:'涮锅必备，吸收汤汁',foodImg:foodImg('2')},
+        {id:205,name:'肥牛卷',price:22,sales:2987,desc:'进口肥牛，涮30秒最佳',foodImg:foodImg('205')},
+        {id:206,name:'虾滑',price:18,sales:2345,desc:'手打虾滑，Q弹鲜甜',foodImg:foodImg('206')},
+        {id:207,name:'蔬菜拼盘',price:12,sales:3456,desc:'时令鲜蔬，六种搭配',foodImg:foodImg('207')},
+        {id:208,name:'手工面条',price:6,sales:2345,desc:'涮锅必备，吸收汤汁',foodImg:foodImg('208')},
       ]},
     ]
   },
   {id:3,name:'1点点(江大店)',category:'奶茶',rating:4.9,monthlySales:9230,deliveryTime:'20分钟',deliveryFee:'免配送费',minPrice:12,distance:280,avgPrice:15,cover:'bg-gradient-to-br from-green-600 to-teal-400',emoji:'🧋',coverImg:restoImg('3'),tags:['人气爆棚','458条好评'],coupons:[{discount:3,desc:'满¥15减3'}],
     menu:[
       {cat:'人气推荐',items:[
-        {id:301,name:'波霸奶茶',price:14,sales:7654,desc:'大颗珍珠Q弹有嚼劲',foodImg:foodImg('3')},
-        {id:302,name:'四季奶青',price:13,sales:6543,desc:'清爽茶底搭配鲜奶',foodImg:foodImg('3')},
-        {id:303,name:'冰淇淋红茶',price:16,sales:5432,desc:'红茶+香草冰淇淋，江大爆款',foodImg:foodImg('3')},
-        {id:304,name:'波霸奶绿',price:14,sales:4567,desc:'茉莉绿茶+大波霸',foodImg:foodImg('3')},
+        {id:301,name:'波霸奶茶',price:14,sales:7654,desc:'大颗珍珠Q弹有嚼劲',foodImg:foodImg('301')},
+        {id:302,name:'四季奶青',price:13,sales:6543,desc:'清爽茶底搭配鲜奶',foodImg:foodImg('302')},
+        {id:303,name:'冰淇淋红茶',price:16,sales:5432,desc:'红茶+香草冰淇淋，江大爆款',foodImg:foodImg('303')},
+        {id:304,name:'波霸奶绿',price:14,sales:4567,desc:'茉莉绿茶+大波霸',foodImg:foodImg('304')},
       ]},
       {cat:'鲜果系列',items:[
-        {id:305,name:'葡萄柚绿',price:18,sales:4321,desc:'鲜榨葡萄柚+绿茶',foodImg:foodImg('3')},
-        {id:306,name:'柠檬养乐多',price:15,sales:3456,desc:'清爽解腻，夏日首选',foodImg:foodImg('3')},
-        {id:307,name:'芒果冰沙',price:20,sales:2987,desc:'新鲜芒果打成冰沙',foodImg:foodImg('3')},
-        {id:308,name:'百香果绿茶',price:16,sales:2678,desc:'百香果+绿茶，酸甜清爽',foodImg:foodImg('3')},
+        {id:305,name:'葡萄柚绿',price:18,sales:4321,desc:'鲜榨葡萄柚+绿茶',foodImg:foodImg('305')},
+        {id:306,name:'柠檬养乐多',price:15,sales:3456,desc:'清爽解腻，夏日首选',foodImg:foodImg('306')},
+        {id:307,name:'芒果冰沙',price:20,sales:2987,desc:'新鲜芒果打成冰沙',foodImg:foodImg('307')},
+        {id:308,name:'百香果绿茶',price:16,sales:2678,desc:'百香果+绿茶，酸甜清爽',foodImg:foodImg('308')},
       ]},
     ]
   },
   {id:4,name:'重庆酸菜鱼',category:'中餐',rating:4.7,monthlySales:3890,deliveryTime:'30分钟',deliveryFee:'¥2',minPrice:20,distance:450,avgPrice:28,cover:'bg-gradient-to-br from-orange-600 to-yellow-500',emoji:'🐟',coverImg:restoImg('4'),tags:['后街老店','川渝风味'],coupons:[{discount:5,desc:'满¥30减5'}],
     menu:[
       {cat:'招牌菜品',items:[
-        {id:401,name:'酸菜鱼(小份)',price:38,sales:3456,desc:'嫩滑鱼片+酸菜，豆腐巨嫩',foodImg:foodImg('4')},
-        {id:402,name:'酸菜鱼(大份)',price:58,sales:2345,desc:'分量加倍，两三人够吃',foodImg:foodImg('4')},
-        {id:403,name:'辣椒小炒肉',price:28,sales:1876,desc:'五花肉爆炒辣椒，下饭神器',foodImg:foodImg('4')},
-        {id:404,name:'水煮肉片',price:36,sales:1567,desc:'麻辣鲜香，肉片嫩滑',foodImg:foodImg('4')},
+        {id:401,name:'酸菜鱼(小份)',price:38,sales:3456,desc:'嫩滑鱼片+酸菜，豆腐巨嫩',foodImg:foodImg('401')},
+        {id:402,name:'酸菜鱼(大份)',price:58,sales:2345,desc:'分量加倍，两三人够吃',foodImg:foodImg('402')},
+        {id:403,name:'辣椒小炒肉',price:28,sales:1876,desc:'五花肉爆炒辣椒，下饭神器',foodImg:foodImg('403')},
+        {id:404,name:'水煮肉片',price:36,sales:1567,desc:'麻辣鲜香，肉片嫩滑',foodImg:foodImg('404')},
       ]},
       {cat:'家常小炒',items:[
-        {id:405,name:'牛柳炒时蔬',price:32,sales:1567,desc:'先炸后炒，外酥里嫩',foodImg:foodImg('4')},
-        {id:406,name:'麻婆豆腐',price:16,sales:2987,desc:'正宗川味麻婆豆腐',foodImg:foodImg('4')},
-        {id:407,name:'蛋炒饭',price:10,sales:3456,desc:'粒粒分明，蛋香浓郁',foodImg:foodImg('4')},
-        {id:408,name:'酸辣土豆丝',price:14,sales:2345,desc:'爽脆酸辣，经典下饭菜',foodImg:foodImg('4')},
+        {id:405,name:'牛柳炒时蔬',price:32,sales:1567,desc:'先炸后炒，外酥里嫩',foodImg:foodImg('405')},
+        {id:406,name:'麻婆豆腐',price:16,sales:2987,desc:'正宗川味麻婆豆腐',foodImg:foodImg('406')},
+        {id:407,name:'蛋炒饭',price:10,sales:3456,desc:'粒粒分明，蛋香浓郁',foodImg:foodImg('407')},
+        {id:408,name:'酸辣土豆丝',price:14,sales:2345,desc:'爽脆酸辣，经典下饭菜',foodImg:foodImg('408')},
       ]},
     ]
   },
   {id:5,name:'小春鹤',category:'日料',rating:4.8,monthlySales:1890,deliveryTime:'35分钟',deliveryFee:'免配送费',minPrice:25,distance:680,avgPrice:25,cover:'bg-gradient-to-br from-amber-600 to-yellow-300',emoji:'🍱',coverImg:restoImg('5'),tags:['精致日料','定食必点'],coupons:[{discount:8,desc:'满¥40减8'}],
     menu:[
       {cat:'定食套餐',items:[
-        {id:501,name:'咖喱鸡排定食',price:32,sales:1234,desc:'酥脆鸡排+咖喱酱+米饭+味增汤',foodImg:foodImg('5')},
-        {id:502,name:'照烧鸡腿定食',price:30,sales:987,desc:'去骨鸡腿，照烧酱汁浓郁',foodImg:foodImg('5')},
-        {id:503,name:'熏鸡肉沙拉',price:26,sales:876,desc:'烟熏鸡肉+时蔬，健康轻食',foodImg:foodImg('5')},
-        {id:504,name:'炸猪排定食',price:35,sales:765,desc:'厚切猪排+芝麻酱+卷心菜',foodImg:foodImg('5')},
+        {id:501,name:'咖喱鸡排定食',price:32,sales:1234,desc:'酥脆鸡排+咖喱酱+米饭+味增汤',foodImg:foodImg('501')},
+        {id:502,name:'照烧鸡腿定食',price:30,sales:987,desc:'去骨鸡腿，照烧酱汁浓郁',foodImg:foodImg('502')},
+        {id:503,name:'熏鸡肉沙拉',price:26,sales:876,desc:'烟熏鸡肉+时蔬，健康轻食',foodImg:foodImg('503')},
+        {id:504,name:'炸猪排定食',price:35,sales:765,desc:'厚切猪排+芝麻酱+卷心菜',foodImg:foodImg('504')},
       ]},
       {cat:'小食饮品',items:[
-        {id:505,name:'唐扬炸鸡块',price:18,sales:1567,desc:'日式炸鸡，外酥内多汁',foodImg:foodImg('5')},
-        {id:506,name:'可尔必思',price:10,sales:2345,desc:'日式乳酸菌饮品',foodImg:foodImg('5')},
-        {id:507,name:'抹茶大福(2个)',price:12,sales:1890,desc:'日式抹茶糯米糍',foodImg:foodImg('5')},
-        {id:508,name:'章鱼小丸子(6个)',price:16,sales:2109,desc:'外酥里嫩，木鱼花跳舞',foodImg:foodImg('5')},
+        {id:505,name:'唐扬炸鸡块',price:18,sales:1567,desc:'日式炸鸡，外酥内多汁',foodImg:foodImg('505')},
+        {id:506,name:'可尔必思',price:10,sales:2345,desc:'日式乳酸菌饮品',foodImg:foodImg('506')},
+        {id:507,name:'抹茶大福(2个)',price:12,sales:1890,desc:'日式抹茶糯米糍',foodImg:foodImg('507')},
+        {id:508,name:'章鱼小丸子(6个)',price:16,sales:2109,desc:'外酥里嫩，木鱼花跳舞',foodImg:foodImg('508')},
       ]},
     ]
   },
   {id:6,name:'阿兴哥烧烤',category:'烧烤',rating:4.6,monthlySales:4120,deliveryTime:'40分钟',deliveryFee:'¥3',minPrice:20,distance:850,avgPrice:35,cover:'bg-gradient-to-br from-orange-800 to-amber-600',emoji:'🍖',coverImg:restoImg('6'),tags:['深夜食堂','小龙虾'],coupons:[{discount:6,desc:'满¥40减6'}],
     menu:[
       {cat:'烤串必点',items:[
-        {id:601,name:'羊肉串(10串)',price:30,sales:3456,desc:'秘制调料，炭火现烤',foodImg:foodImg('6')},
-        {id:602,name:'牛肉串(10串)',price:35,sales:2987,desc:'精选牛里脊，鲜嫩多汁',foodImg:foodImg('6')},
-        {id:603,name:'烤鸡翅(5只)',price:20,sales:2345,desc:'蜜汁口味，外焦里嫩',foodImg:foodImg('6')},
-        {id:604,name:'烤茄子',price:10,sales:1890,desc:'蒜蓉粉丝烤茄子',foodImg:foodImg('6')},
-        {id:605,name:'烤五花肉(5串)',price:25,sales:2109,desc:'肥瘦相间，焦香四溢',foodImg:foodImg('6')},
+        {id:601,name:'羊肉串(10串)',price:30,sales:3456,desc:'秘制调料，炭火现烤',foodImg:foodImg('601')},
+        {id:602,name:'牛肉串(10串)',price:35,sales:2987,desc:'精选牛里脊，鲜嫩多汁',foodImg:foodImg('602')},
+        {id:603,name:'烤鸡翅(5只)',price:20,sales:2345,desc:'蜜汁口味，外焦里嫩',foodImg:foodImg('603')},
+        {id:604,name:'烤茄子',price:10,sales:1890,desc:'蒜蓉粉丝烤茄子',foodImg:foodImg('604')},
+        {id:605,name:'烤五花肉(5串)',price:25,sales:2109,desc:'肥瘦相间，焦香四溢',foodImg:foodImg('605')},
       ]},
       {cat:'特色大菜',items:[
-        {id:606,name:'麻辣小龙虾(小)',price:58,sales:1678,desc:'江苏本地龙虾，香辣入味',foodImg:foodImg('6')},
-        {id:607,name:'烤鱼',price:48,sales:1234,desc:'整条烤鱼配时蔬',foodImg:foodImg('6')},
-        {id:608,name:'锡纸花甲粉',price:28,sales:1876,desc:'花甲+粉丝+金针菇',foodImg:foodImg('6')},
+        {id:606,name:'麻辣小龙虾(小)',price:58,sales:1678,desc:'江苏本地龙虾，香辣入味',foodImg:foodImg('606')},
+        {id:607,name:'烤鱼',price:48,sales:1234,desc:'整条烤鱼配时蔬',foodImg:foodImg('607')},
+        {id:608,name:'锡纸花甲粉',price:28,sales:1876,desc:'花甲+粉丝+金针菇',foodImg:foodImg('608')},
       ]},
     ]
   },
   {id:7,name:'徐州鸡蛋灌饼',category:'快餐',rating:4.9,monthlySales:6780,deliveryTime:'15分钟',deliveryFee:'免配送费',minPrice:8,distance:200,avgPrice:8,cover:'bg-gradient-to-br from-yellow-500 to-orange-400',emoji:'🫓',coverImg:restoImg('7'),tags:['后街排队王','江大早餐'],coupons:[{discount:2,desc:'满¥10减2'}],
     menu:[
       {cat:'招牌灌饼',items:[
-        {id:701,name:'原味鸡蛋灌饼',price:8,sales:5678,desc:'先煎后烤，外酥里嫩，香脆可口',foodImg:foodImg('7')},
-        {id:702,name:'加里脊灌饼',price:12,sales:4567,desc:'灌饼+里脊肉，荤素搭配',foodImg:foodImg('7')},
-        {id:703,name:'加烤肠灌饼',price:10,sales:3890,desc:'灌饼+烤肠，经典搭配',foodImg:foodImg('7')},
-        {id:704,name:'全家福灌饼',price:15,sales:2345,desc:'里脊+烤肠+鸡蛋+生菜',foodImg:foodImg('7')},
+        {id:701,name:'原味鸡蛋灌饼',price:8,sales:5678,desc:'先煎后烤，外酥里嫩，香脆可口',foodImg:foodImg('701')},
+        {id:702,name:'加里脊灌饼',price:12,sales:4567,desc:'灌饼+里脊肉，荤素搭配',foodImg:foodImg('702')},
+        {id:703,name:'加烤肠灌饼',price:10,sales:3890,desc:'灌饼+烤肠，经典搭配',foodImg:foodImg('703')},
+        {id:704,name:'全家福灌饼',price:15,sales:2345,desc:'里脊+烤肠+鸡蛋+生菜',foodImg:foodImg('704')},
       ]},
       {cat:'饮品',items:[
-        {id:705,name:'现磨豆浆',price:4,sales:4567,desc:'黄豆现磨，香甜浓郁',foodImg:foodImg('7')},
-        {id:706,name:'绿豆沙',price:6,sales:3456,desc:'冰镇绿豆沙，夏天必备',foodImg:foodImg('7')},
-        {id:707,name:'皮蛋瘦肉粥',price:8,sales:2345,desc:'料足味鲜，暖胃首选',foodImg:foodImg('7')},
+        {id:705,name:'现磨豆浆',price:4,sales:4567,desc:'黄豆现磨，香甜浓郁',foodImg:foodImg('705')},
+        {id:706,name:'绿豆沙',price:6,sales:3456,desc:'冰镇绿豆沙，夏天必备',foodImg:foodImg('706')},
+        {id:707,name:'皮蛋瘦肉粥',price:8,sales:2345,desc:'料足味鲜，暖胃首选',foodImg:foodImg('707')},
       ]},
     ]
   },
   {id:8,name:'湖南菜馆',category:'中餐',rating:4.7,monthlySales:3560,deliveryTime:'30分钟',deliveryFee:'¥2',minPrice:18,distance:600,avgPrice:26,cover:'bg-gradient-to-br from-red-800 to-red-500',emoji:'🌶️',coverImg:restoImg('8'),tags:['新晋之秀','湘味正宗'],coupons:[{discount:6,desc:'满¥30减6'}],
     menu:[
       {cat:'招牌湘菜',items:[
-        {id:801,name:'辣椒炒肉',price:26,sales:2987,desc:'湖南正宗辣椒炒肉，又辣又香',foodImg:foodImg('8')},
-        {id:802,name:'小炒黄牛肉',price:38,sales:2345,desc:'嫩黄牛肉爆炒，小米辣提味',foodImg:foodImg('8')},
-        {id:803,name:'剁椒鱼头',price:48,sales:1678,desc:'胖头鱼+湖南剁椒，鲜辣入味',foodImg:foodImg('8')},
-        {id:804,name:'农家小炒肉',price:24,sales:1987,desc:'青椒+五花肉，地道湖南味',foodImg:foodImg('8')},
+        {id:801,name:'辣椒炒肉',price:26,sales:2987,desc:'湖南正宗辣椒炒肉，又辣又香',foodImg:foodImg('801')},
+        {id:802,name:'小炒黄牛肉',price:38,sales:2345,desc:'嫩黄牛肉爆炒，小米辣提味',foodImg:foodImg('802')},
+        {id:803,name:'剁椒鱼头',price:48,sales:1678,desc:'胖头鱼+湖南剁椒，鲜辣入味',foodImg:foodImg('803')},
+        {id:804,name:'农家小炒肉',price:24,sales:1987,desc:'青椒+五花肉，地道湖南味',foodImg:foodImg('804')},
       ]},
       {cat:'主食',items:[
-        {id:805,name:'湖南米粉',price:14,sales:3456,desc:'骨汤米粉，酸豆角+花生',foodImg:foodImg('8')},
-        {id:806,name:'米饭',price:2,sales:5678,desc:'标配白米饭',foodImg:foodImg('8')},
-        {id:807,name:'蒜蓉空心菜',price:16,sales:1876,desc:'新鲜时蔬，蒜香浓郁',foodImg:foodImg('8')},
+        {id:805,name:'湖南米粉',price:14,sales:3456,desc:'骨汤米粉，酸豆角+花生',foodImg:foodImg('805')},
+        {id:806,name:'米饭',price:2,sales:5678,desc:'标配白米饭',foodImg:foodImg('806')},
+        {id:807,name:'蒜蓉空心菜',price:16,sales:1876,desc:'新鲜时蔬，蒜香浓郁',foodImg:foodImg('807')},
       ]},
     ]
   },
@@ -723,7 +769,7 @@ function getReply(msg){var keys=Object.keys(chatReplies);for(var i=0;i<keys.leng
 function addChatMsg(text,isUser){var c=document.getElementById('chatMessages'),d=document.createElement('div');d.className='flex '+(isUser?'justify-end':'justify-start')+' animate-pop-in';d.innerHTML=isUser?'<div class="bg-mt text-black rounded-2xl rounded-br-md px-4 py-2.5 max-w-[80%] text-sm">'+text+'</div>':'<div class="flex gap-2 max-w-[85%]"><div class="w-6 h-6 rounded-full bg-mt flex items-center justify-center text-xs flex-shrink-0">🤖</div><div class="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-bl-md px-4 py-2.5 text-sm dark:text-white">'+text+'</div></div>';c.appendChild(d);c.scrollTop=c.scrollHeight;}
 function sendMsg(){var inp=document.getElementById('chatInput'),text=inp.value.trim();if(!text)return;addChatMsg(text,true);inp.value='';setTimeout(function(){addChatMsg(getReply(text),false);},600);}
 function sendQuickReply(text){document.getElementById('chatInput').value=text;sendMsg();}
-function toggleChat(){var o=document.getElementById('chatOverlay'),w=document.getElementById('chatWindow');if(!o||!w)return;if(!w.classList.contains('translate-y-full')){o.classList.add('hidden');w.classList.add('translate-y-full');}else{o.classList.remove('hidden');w.classList.remove('translate-y-full');var m=document.getElementById('chatMessages');if(m.children.length===0){addChatMsg('您好！我是美团智能客服 🤖',false);addChatMsg('您可以问我：推荐美食、配送时间、优惠券、退款、投诉等~',false);}}}
+function toggleChat(){var o=document.getElementById('chatOverlay'),w=document.getElementById('chatWindow');if(!o||!w)return;if(!w.classList.contains('translate-y-full')){o.classList.add('hidden');w.classList.add('translate-y-full');}else{o.classList.remove('hidden');w.classList.remove('translate-y-full');var m=document.getElementById('chatMessages');if(m.children.length===0){addChatMsg('您好！我是朱公子智能客服 🤖',false);addChatMsg('您可以问我：推荐美食、配送时间、优惠券、退款、投诉等~',false);}}}
 
 // ===== 深色模式 =====
 function toggleDark(){document.documentElement.classList.toggle('dark');localStorage.setItem('mt_dark',document.documentElement.classList.contains('dark'));}
@@ -741,7 +787,7 @@ function renderProfile(){var p=getProfile();document.getElementById('profileName
 
 // ===== Toast =====
 var toastTimer=null;
-function showToast(text){var el=document.getElementById('toast');if(!el)return;if(toastTimer){clearTimeout(toastTimer);el.classList.remove('toast-hide');}el.innerHTML='<div class="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-4 py-2.5 rounded-full text-sm font-bold shadow-lg whitespace-nowrap toast-show">'+text+'</div>';toastTimer=setTimeout(function(){var div=el.querySelector('div');if(div){div.classList.add('toast-hide');div.classList.remove('toast-show');}toastTimer=null;},1500);}
+function showToast(text){var el=document.getElementById('toast');if(!el)return;if(toastTimer){clearTimeout(toastTimer);el.classList.remove('toast-hide');}el.innerHTML='<div class="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-5 py-3 rounded-2xl text-sm font-bold shadow-2xl whitespace-nowrap toast-show" style="box-shadow:0 8px 32px rgba(255,107,53,.3)">✨ '+text+'</div>';toastTimer=setTimeout(function(){var div=el.querySelector('div');if(div){div.classList.add('toast-hide');div.classList.remove('toast-show');}toastTimer=null;},1800);}
 
 // ===== 启动 =====
 function init(){renderRestaurantList();renderRecommend();renderCouponBanner();updateNavHighlight();updateAddressDisplay();updateAllBadges();document.getElementById('cartBar').style.display='none';}
