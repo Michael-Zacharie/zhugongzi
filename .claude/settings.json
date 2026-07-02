@@ -1,4 +1,27 @@
 {
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \" 提醒：改完代码后请刷新浏览器查看效果\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \" 结束前检查: 1.页面功能正常? 2.数据持久化OK? 3.深色模式兼容?\""
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "WebSearch(*)",

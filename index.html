@@ -1,1000 +1,750 @@
-<!DOCTYPE html>
-<html lang="zh-CN" class="">
+<!DOCTYPE html><html lang="zh-CN" class="">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>美团外卖 - 外卖点餐</title>
-  <script>
-    window.tailwind = { config: {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            mt: '#FFD100',
-            'mt-dark': '#1a1a2e',
-            'mt-card': '#16213e',
-          }
-        }
-      }
-    }};
-  </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
-    * { font-family: 'Noto Sans SC', -apple-system, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #f5f5f5; }
-    .dark body, .dark { background: #1a1a2e; }
-
-    .scroll-hide::-webkit-scrollbar { display: none; }
-    .scroll-hide { -ms-overflow-style: none; scrollbar-width: none; }
-
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes popIn {
-      0% { transform: scale(0.9); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    @keyframes bounceIn {
-      0% { transform: scale(0.3); opacity: 0; }
-      50% { transform: scale(1.05); }
-      70% { transform: scale(0.9); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-    @keyframes slideRight {
-      from { transform: translateX(-20px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-
-    .animate-slide-up { animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
-    .animate-fade-in { animation: fadeIn 0.3s ease; }
-    .animate-pop-in { animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-    .animate-bounce-in { animation: bounceIn 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-    .animate-slide-right { animation: slideRight 0.3s ease; }
-
-    .cart-badge {
-      animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .dish-card:active { transform: scale(0.98); transition: transform 0.1s; }
-    .btn-press:active { transform: scale(0.95); transition: transform 0.1s; }
-
-    .overlay {
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(2px);
-    }
-
-    .skeleton {
-      background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-    }
-    .dark .skeleton {
-      background: linear-gradient(90deg, #16213e 25%, #1a1a2e 50%, #16213e 75%);
-      background-size: 200% 100%;
-    }
-
-    .status-line::before {
-      content: '';
-      position: absolute;
-      left: 7px;
-      top: 28px;
-      bottom: -4px;
-      width: 2px;
-      background: #e5e5e5;
-    }
-    .dark .status-line::before { background: #333; }
-    .status-line.active::before { background: #FFD100; }
-    .status-line:last-child::before { display: none; }
-
-    .page { display: none; }
-    .page.active { display: block; animation: fadeIn 0.25s ease; }
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>美团外卖 - 江苏大学</title>
+<script>window.tailwind={config:{darkMode:'class',theme:{extend:{colors:{mt:'#FFD100','mt-dark':'#1a1a2e','mt-card':'#16213e'}}}}};</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{font-family:'PingFang SC','Microsoft YaHei','Hiragino Sans GB',-apple-system,sans-serif;margin:0;padding:0;box-sizing:border-box}
+body{background:#f5f5f5}
+.scroll-hide::-webkit-scrollbar{display:none}
+.scroll-hide{-ms-overflow-style:none;scrollbar-width:none}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{0%{transform:scale(.9);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-10deg)}75%{transform:rotate(10deg)}}
+.animate-slide-up{animation:slideUp .3s cubic-bezier(.16,1,.3,1)}
+.animate-pop-in{animation:popIn .25s cubic-bezier(.16,1,.3,1)}
+.btn-press:active{transform:scale(.95);transition:transform .1s}
+.overlay{background:rgba(0,0,0,.5);backdrop-filter:blur(2px)}
+.page{display:none}
+.page.active{display:block;animation:fadeIn .2s ease}
+.status-line::before{content:'';position:absolute;left:9px;top:32px;bottom:-8px;width:2px;background:#e5e5e5}
+.dark .status-line::before{background:#333}
+.status-line.active::before{background:#FFD100}
+.status-line:last-child::before{display:none}
+.nav-btn.active-nav{color:#FFD100!important}
+.coupon-card{background:linear-gradient(135deg,#fff9e6 0%,#fff3cc 100%)}
+.dark .coupon-card{background:linear-gradient(135deg,#2d2410 0%,#3d2e14 100%)}
+.food-img{object-fit:cover;width:100%;height:100%;border-radius:inherit}
+.chat-fab{animation:shake 3s infinite}
+@keyframes toastIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes toastOut{from{transform:translateY(0);opacity:1}to{transform:translateY(20px);opacity:0}}
+.toast-show{animation:toastIn .3s ease forwards}
+.toast-hide{animation:toastOut .3s ease forwards}
+</style>
 </head>
-<body class="min-h-screen max-w-lg mx-auto bg-white dark:bg-mt-dark transition-colors duration-300 relative">
+<body class="min-h-screen max-w-lg mx-auto bg-white dark:bg-mt-dark transition-colors relative">
 
-  <!-- ========== 首页 ========== -->
-  <div id="page-home" class="page active pb-20">
-    <!-- 顶栏 -->
-    <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800">
-      <div class="flex items-center gap-3 px-4 py-3">
-        <div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-2 flex-1">
-          <i class="fas fa-search text-gray-400 text-sm"></i>
-          <input id="searchInput" type="text" placeholder="搜索商家或菜品" class="bg-transparent text-sm flex-1 outline-none dark:text-white dark:placeholder-gray-500">
-        </div>
-        <button onclick="toggleDark()" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400">
-          <i class="fas fa-moon dark:hidden text-sm"></i>
-          <i class="fas fa-sun hidden dark:inline text-sm"></i>
-        </button>
-      </div>
-      <!-- 分类 -->
-      <div class="flex gap-1 px-3 pb-2 overflow-x-auto scroll-hide">
-        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-mt text-black" data-cat="all">全部</button>
-        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="中餐">🍚 中餐</button>
-        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="快餐">🍔 快餐</button>
-        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="奶茶">🧋 奶茶</button>
-        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="火锅">🍲 火锅</button>
-        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="日料">🍣 日料</button>
-        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="烧烤">🍖 烧烤</button>
-        <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="甜品">🍰 甜品</button>
-      </div>
+<!-- ===== 首页 ===== -->
+<div id="page-home" class="page active pb-24">
+  <div class="bg-white dark:bg-mt-dark px-4 py-3 flex items-center gap-3 border-b border-gray-100 dark:border-gray-800">
+    <div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-2 flex-1 cursor-pointer" onclick="showAddressModal()">
+      <i class="fas fa-map-marker-alt text-mt text-sm"></i>
+      <span id="homeAddress" class="text-sm dark:text-white truncate">江苏大学</span>
+      <i class="fas fa-chevron-down text-gray-400 text-xs ml-auto"></i>
     </div>
-    <!-- 横幅 -->
-    <div class="px-4 mt-3">
-      <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-4 flex items-center justify-between text-white relative overflow-hidden">
-        <div>
-          <div class="text-lg font-bold">新用户专享</div>
-          <div class="text-sm opacity-90 mt-1">首单立减 ¥15</div>
-        </div>
-        <div class="text-5xl opacity-30 absolute right-3">🎉</div>
-      </div>
-    </div>
-    <!-- 商家列表 -->
-    <div class="px-4 mt-4">
-      <div class="flex items-center justify-between mb-3">
-        <h2 class="text-lg font-bold dark:text-white">附近商家</h2>
-        <div class="flex gap-2">
-          <button class="sort-btn text-xs text-gray-500 dark:text-gray-400 bg-mt text-black px-2 py-1 rounded" data-sort="rating">评分最高</button>
-          <button class="sort-btn text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded" data-sort="sales">销量最高</button>
-          <button class="sort-btn text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded" data-sort="time">最快送达</button>
-        </div>
-      </div>
-      <div id="restaurantList" class="space-y-3"></div>
-    </div>
+    <a href="#" onclick="if(getCartCount()>0)navigate('checkout');return false" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 flex-shrink-0 relative">
+      <i class="fas fa-shopping-cart text-sm"></i>
+      <span id="homeCartBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full items-center justify-center font-bold hidden">0</span>
+    </a>
+    <button onclick="toggleDark()" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 flex-shrink-0">
+      <i class="fas fa-moon dark:hidden text-sm"></i><i class="fas fa-sun hidden dark:inline text-sm"></i>
+    </button>
   </div>
-
-  <!-- ========== 商家详情 ========== -->
-  <div id="page-restaurant" class="page pb-20">
-    <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark">
-      <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-100 dark:border-gray-800">
-        <button data-back="home" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center btn-press">
-          <i class="fas fa-arrow-left text-gray-600 dark:text-gray-300 text-sm"></i>
-        </button>
-        <span class="font-bold dark:text-white" id="restoName">商家详情</span>
+  <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark px-4 pb-2 pt-2">
+    <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-2 flex-1">
+        <i class="fas fa-search text-gray-400 text-sm"></i>
+        <input id="searchInput" type="text" placeholder="搜索商家或菜品" class="bg-transparent text-sm flex-1 outline-none dark:text-white dark:placeholder-gray-500">
       </div>
-    </div>
-    <!-- 商家头图 -->
-    <div id="restoHeader" class="h-44 bg-gradient-to-br from-yellow-400 to-orange-500 relative"></div>
-    <!-- 商家信息 -->
-    <div class="px-4 py-3 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800 -mt-6 rounded-t-2xl relative z-10">
-      <div class="flex items-start justify-between">
-        <div>
-          <h2 class="text-xl font-bold dark:text-white" id="restoTitle"></h2>
-          <div class="flex items-center gap-2 mt-1 text-sm text-gray-500 dark:text-gray-400">
-            <span class="text-yellow-500">★</span><span id="restoRating"></span>
-            <span>月售<span id="restoSales"></span></span>
-          </div>
-        </div>
-        <span class="text-xs text-green-600 bg-green-50 dark:bg-green-900/30 dark:text-green-400 px-2 py-1 rounded">商家自配</span>
-      </div>
-      <div class="flex gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
-        <span id="restoTime"></span>
-        <span id="restoFee"></span>
-        <span>起送¥<span id="restoMin"></span></span>
-      </div>
-    </div>
-    <!-- 菜单分类标签 -->
-    <div class="sticky top-14 z-20 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800">
-      <div id="menuTabs" class="flex px-4 overflow-x-auto scroll-hide gap-0"></div>
-    </div>
-    <!-- 菜单列表 -->
-    <div id="menuList" class="px-4 py-3 space-y-4"></div>
-    <!-- 底部购物车条 -->
-    <div id="cartBar" class="fixed bottom-16 left-0 right-0 max-w-lg mx-auto bg-gray-900 dark:bg-gray-800 text-white px-4 py-3 flex items-center gap-3 z-20 cursor-pointer" onclick="toggleCart()">
-      <div class="relative">
-        <div class="w-11 h-11 rounded-full bg-mt flex items-center justify-center text-black font-bold text-lg">
-          <i class="fas fa-shopping-bag"></i>
-        </div>
-        <span id="cartCountBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold hidden cart-badge">0</span>
-      </div>
-      <div class="flex-1">
-        <span id="cartTotal" class="font-bold text-lg">¥0.00</span>
-        <span class="text-gray-400 text-xs ml-2">另需配送费</span>
-      </div>
-      <button id="checkoutBtn" class="bg-mt text-black font-bold px-5 py-2 rounded-full text-sm disabled:opacity-50 disabled:cursor-not-allowed btn-press" disabled onclick="event.stopPropagation(); navigate('checkout')">去结算</button>
-    </div>
-  </div>
-
-  <!-- ========== 购物车抽屉 ========== -->
-  <div id="cartOverlay" class="fixed inset-0 z-40 overlay hidden" onclick="toggleCart()"></div>
-  <div id="cartDrawer" class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto z-50 bg-white dark:bg-mt-dark rounded-t-2xl shadow-2xl transform translate-y-full transition-transform duration-300" style="max-height: 60vh;">
-    <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
-      <h3 class="font-bold dark:text-white">购物车</h3>
-      <button onclick="clearCart()" class="text-xs text-gray-400">清空</button>
-    </div>
-    <div id="cartItems" class="px-4 py-2 overflow-y-auto" style="max-height: calc(60vh - 120px);"></div>
-    <div class="px-4 py-3 border-t border-gray-100 dark:border-gray-800">
-      <div class="flex items-center justify-between mb-2">
-        <span class="text-sm text-gray-500 dark:text-gray-400">小计</span>
-        <span class="font-bold text-lg dark:text-white" id="cartSubtotal">¥0.00</span>
-      </div>
-      <span class="text-xs text-gray-400">不含配送费</span>
-    </div>
-  </div>
-
-  <!-- ========== 结算页 ========== -->
-  <div id="page-checkout" class="page pb-20">
-    <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800">
-      <div class="flex items-center gap-3 px-4 py-3">
-        <button data-back="restaurant" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center btn-press">
-          <i class="fas fa-arrow-left text-gray-600 dark:text-gray-300 text-sm"></i>
-        </button>
-        <span class="font-bold dark:text-white">确认订单</span>
-      </div>
-    </div>
-    <div class="px-4 py-4 space-y-4">
-      <!-- 地址 -->
-      <div class="bg-white dark:bg-mt-card p-4 rounded-xl border border-gray-100 dark:border-gray-800">
-        <div class="flex items-center gap-2 mb-2"><i class="fas fa-map-marker-alt text-mt"></i><span class="font-medium dark:text-white">送至</span></div>
-        <div class="text-sm text-gray-600 dark:text-gray-300">上海市浦东新区张江高科技园区 3号楼 1201室</div>
-      </div>
-      <!-- 订单明细 -->
-      <div class="bg-white dark:bg-mt-card p-4 rounded-xl border border-gray-100 dark:border-gray-800">
-        <h3 class="font-bold mb-3 dark:text-white">订单明细</h3>
-        <div id="checkoutItems" class="space-y-2 text-sm"></div>
-        <div class="border-t border-gray-100 dark:border-gray-700 mt-3 pt-3 space-y-1 text-sm">
-          <div class="flex justify-between text-gray-500 dark:text-gray-400"><span>商品小计</span><span id="checkoutSubtotal"></span></div>
-          <div class="flex justify-between text-gray-500 dark:text-gray-400"><span>配送费</span><span>¥5.00</span></div>
-          <div class="flex justify-between font-bold text-lg dark:text-white mt-2 pt-2 border-t border-gray-100 dark:border-gray-700"><span>实付</span><span id="checkoutTotal"></span></div>
-        </div>
-      </div>
-      <!-- 备注 -->
-      <div class="bg-white dark:bg-mt-card p-4 rounded-xl border border-gray-100 dark:border-gray-800">
-        <div class="flex items-center gap-2"><i class="fas fa-edit text-gray-400"></i><input type="text" placeholder="订单备注（选填）" class="flex-1 text-sm outline-none dark:bg-transparent dark:text-white dark:placeholder-gray-500"></div>
-      </div>
-      <!-- 提交 -->
-      <button onclick="placeOrder()" class="w-full bg-mt text-black font-bold py-3.5 rounded-xl text-lg btn-press hover:bg-yellow-500 transition-colors">
-        提交订单
+      <button onclick="toggleFilterPanel()" id="filterBtn" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 flex-shrink-0 relative">
+        <i class="fas fa-sliders-h text-sm"></i><span id="filterDot" class="absolute -top-1 -right-1 w-3 h-3 bg-mt rounded-full hidden"></span>
       </button>
     </div>
   </div>
-
-  <!-- ========== 订单追踪 ========== -->
-  <div id="page-tracking" class="page pb-20">
-    <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800">
-      <div class="flex items-center gap-3 px-4 py-3">
-        <button data-back="orders" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center btn-press">
-          <i class="fas fa-arrow-left text-gray-600 dark:text-gray-300 text-sm"></i>
-        </button>
-        <span class="font-bold dark:text-white">订单追踪</span>
+  <div id="filterPanel" class="px-4 pb-3 hidden">
+    <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-3 space-y-3">
+      <div class="flex items-center justify-between"><span class="text-xs font-bold dark:text-white">筛选条件</span><button onclick="resetFilters()" class="text-xs text-mt">重置</button></div>
+      <div class="flex flex-wrap gap-1.5"><span class="text-xs text-gray-400 w-full">价格区间</span>
+        <button class="filter-price btn-press px-3 py-1 rounded-full text-xs bg-mt text-black font-bold" data-price="all">全部</button>
+        <button class="filter-price btn-press px-3 py-1 rounded-full text-xs bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300" data-price="low">¥15以下</button>
+        <button class="filter-price btn-press px-3 py-1 rounded-full text-xs bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300" data-price="mid">¥15-30</button>
+        <button class="filter-price btn-press px-3 py-1 rounded-full text-xs bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300" data-price="high">¥30以上</button>
+      </div>
+      <div class="flex flex-wrap gap-1.5"><span class="text-xs text-gray-400 w-full">配送时间</span>
+        <button class="filter-time btn-press px-3 py-1 rounded-full text-xs bg-mt text-black font-bold" data-time="all">全部</button>
+        <button class="filter-time btn-press px-3 py-1 rounded-full text-xs bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300" data-time="fast">30分钟内</button>
+        <button class="filter-time btn-press px-3 py-1 rounded-full text-xs bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300" data-time="mid">30-40分钟</button>
+      </div>
+      <div class="flex flex-wrap gap-1.5"><span class="text-xs text-gray-400 w-full">距离</span>
+        <button class="filter-dist btn-press px-3 py-1 rounded-full text-xs bg-mt text-black font-bold" data-dist="all">全部</button>
+        <button class="filter-dist btn-press px-3 py-1 rounded-full text-xs bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300" data-dist="near">500m内</button>
+        <button class="filter-dist btn-press px-3 py-1 rounded-full text-xs bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300" data-dist="mid">500m-1km</button>
+        <button class="filter-dist btn-press px-3 py-1 rounded-full text-xs bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-300" data-dist="far">1km以上</button>
       </div>
     </div>
-    <div class="px-4 py-6 text-center">
-      <!-- 骑手信息 -->
-      <div class="bg-white dark:bg-mt-card p-4 rounded-xl border border-gray-100 dark:border-gray-800 mb-6">
-        <div class="flex items-center gap-3">
-          <div class="w-14 h-14 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-2xl">🛵</div>
-          <div class="text-left">
-            <div class="font-bold dark:text-white">骑手正在赶来</div>
-            <div class="text-sm text-gray-500 dark:text-gray-400">预计送达: <span id="trackingETA" class="text-mt font-bold"></span></div>
-          </div>
-          <button class="ml-auto bg-mt text-black font-bold px-4 py-2 rounded-full text-sm btn-press">联系骑手</button>
+  </div>
+  <div class="flex gap-1 px-4 overflow-x-auto scroll-hide">
+    <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-bold bg-mt text-black" data-cat="all">全部</button>
+    <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="中餐">🍚 中餐</button>
+    <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="快餐">🍔 快餐</button>
+    <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="奶茶">🧋 奶茶</button>
+    <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="火锅">🍲 火锅</button>
+    <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="日料">🍣 日料</button>
+    <button class="cat-btn whitespace-nowrap px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300" data-cat="烧烤">🍖 烧烤</button>
+  </div>
+  <div class="px-4 mt-2"><div class="flex gap-2 overflow-x-auto scroll-hide pb-1" id="couponBanner"></div></div>
+  <div class="px-4 mt-2">
+    <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-4 text-white relative overflow-hidden cursor-pointer" onclick="navigate('coupons')">
+      <div class="text-lg font-bold">🎓 江大后街美食</div><div class="text-sm opacity-90 mt-1">东风步行街 · 新用户首单立减 ¥15</div>
+      <div class="text-5xl opacity-30 absolute right-3 bottom-1">🛵</div>
+    </div>
+  </div>
+  <div class="px-4 mt-4" id="recommendSection"><h2 class="text-lg font-bold dark:text-white mb-3">🔥 为你推荐</h2><div class="flex gap-3 overflow-x-auto scroll-hide pb-2" id="recommendList"></div></div>
+  <div class="px-4 mt-4">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-lg font-bold dark:text-white">附近商家</h2>
+      <div class="flex gap-1.5">
+        <button class="sort-btn text-xs px-2.5 py-1.5 rounded-full font-bold bg-mt text-black" data-sort="distance">距离最近</button>
+        <button class="sort-btn text-xs px-2.5 py-1.5 rounded-full font-medium bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400" data-sort="rating">评分最高</button>
+        <button class="sort-btn text-xs px-2.5 py-1.5 rounded-full font-medium bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400" data-sort="sales">销量最高</button>
+      </div>
+    </div>
+    <div id="restaurantList" class="space-y-3"></div>
+  </div>
+</div>
+
+<!-- ===== 商家详情页 ===== -->
+<div id="page-restaurant" class="page">
+  <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark">
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+      <button onclick="navigate('home')" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center btn-press"><i class="fas fa-arrow-left text-gray-600 dark:text-gray-300 text-sm"></i></button>
+      <span class="font-bold dark:text-white flex-1" id="restoName">商家详情</span>
+      <a href="#" onclick="if(getCartCount()>0)navigate('checkout');return false" class="w-8 h-8 rounded-full bg-mt flex items-center justify-center relative btn-press">
+        <i class="fas fa-shopping-cart text-black text-sm"></i>
+        <span id="restoCartBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full items-center justify-center font-bold hidden">0</span>
+      </a>
+    </div>
+  </div>
+  <div id="restoHeader" class="h-48 relative flex items-center justify-center overflow-hidden"></div>
+  <div class="px-4 py-3 bg-white dark:bg-mt-dark -mt-6 rounded-t-2xl relative z-10 border-b border-gray-100 dark:border-gray-800">
+    <div class="flex items-start justify-between"><div><h2 class="text-xl font-bold dark:text-white" id="restoTitle"></h2><div class="flex items-center gap-2 mt-1 text-sm text-gray-500 dark:text-gray-400"><span class="text-yellow-500">★</span><span id="restoRating"></span><span>月售<span id="restoSales"></span></span><span id="restoDist"></span></div></div><span class="text-xs text-green-600 bg-green-50 dark:bg-green-900/30 dark:text-green-400 px-2 py-1 rounded">商家自配</span></div>
+    <div class="flex gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400"><span id="restoTime"></span><span id="restoFee"></span><span>起送¥<span id="restoMin"></span></span></div>
+    <div class="flex gap-2 mt-2 flex-wrap" id="restoCoupons"></div>
+  </div>
+  <div class="sticky top-14 z-20 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800"><div id="menuTabs" class="flex px-4 overflow-x-auto scroll-hide gap-0"></div></div>
+  <div id="menuList" class="px-4 py-3 space-y-4 pb-28"></div>
+  <!-- 浮动购物车栏 -->
+  <div id="cartBar" class="fixed bottom-16 left-0 right-0 max-w-lg mx-auto bg-gray-900 dark:bg-gray-800 text-white px-4 py-3 hidden items-center gap-3 z-20 cursor-pointer rounded-t-xl shadow-lg" onclick="toggleCart()">
+    <div class="relative"><div class="w-11 h-11 rounded-full bg-mt flex items-center justify-center text-black font-bold text-lg"><i class="fas fa-shopping-bag"></i></div><span id="cartCountBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full items-center justify-center font-bold hidden">0</span></div>
+    <div class="flex-1"><span id="cartTotal" class="font-bold text-lg">¥0.00</span><span class="text-gray-400 text-xs ml-2">另需配送费</span></div>
+    <button id="checkoutBtn" class="bg-mt text-black font-bold px-5 py-2 rounded-full text-sm disabled:opacity-50 btn-press" disabled onclick="event.stopPropagation();goCheckout()">去结算</button>
+  </div>
+</div>
+
+<!-- ===== 结算页 ===== -->
+<div id="page-checkout" class="page pb-20">
+  <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800">
+    <div class="flex items-center gap-3 px-4 py-3">
+      <button onclick="navigate('restaurant')" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center btn-press"><i class="fas fa-arrow-left text-gray-600 dark:text-gray-300 text-sm"></i></button>
+      <span class="font-bold dark:text-white">确认订单</span>
+    </div>
+  </div>
+  <div class="px-4 py-4 space-y-4">
+    <div class="bg-white dark:bg-mt-card rounded-xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <div class="p-4 cursor-pointer" onclick="showAddressModal()"><div class="flex items-center gap-2 mb-2"><i class="fas fa-map-marker-alt text-mt text-lg"></i><span class="font-bold dark:text-white">送至</span></div><div class="flex items-center gap-2"><span id="checkoutAddress" class="text-sm text-gray-600 dark:text-gray-300 flex-1"></span><i class="fas fa-chevron-right text-gray-400 text-xs"></i></div></div>
+      <div class="border-t border-gray-100 dark:border-gray-800 px-4 py-2 flex items-center gap-2 text-xs text-gray-400"><i class="fas fa-clock"></i><span id="checkoutETA">约30分钟送达</span></div>
+    </div>
+    <div class="bg-white dark:bg-mt-card rounded-xl border border-gray-100 dark:border-gray-800 p-4">
+      <h3 class="font-bold mb-3 dark:text-white" id="checkoutRestaurant"></h3>
+      <div id="checkoutItems" class="space-y-2 text-sm"></div>
+      <div class="border-t border-gray-100 dark:border-gray-700 mt-3 pt-3 space-y-1.5 text-sm">
+        <div class="flex justify-between text-gray-500 dark:text-gray-400"><span>商品小计</span><span id="checkoutSubtotal"></span></div>
+        <div class="flex justify-between text-gray-500 dark:text-gray-400"><span>配送费</span><span id="checkoutDelivery"></span></div>
+        <div class="flex justify-between text-green-600" id="couponDiscountRow" style="display:none"><span>优惠券</span><span id="couponDiscount">-¥0</span></div>
+        <div class="flex justify-between font-bold text-lg dark:text-white mt-2 pt-2 border-t border-gray-100 dark:border-gray-700"><span>实付</span><span id="checkoutTotal"></span></div>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-mt-card rounded-xl border border-gray-100 dark:border-gray-800 p-4">
+      <div class="flex items-center justify-between cursor-pointer" onclick="toggleCouponSelect()">
+        <div class="flex items-center gap-2"><i class="fas fa-ticket-alt text-red-500"></i><span class="text-sm dark:text-white" id="selectedCouponLabel">选择优惠券</span></div><i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+      </div><div id="couponSelectList" class="mt-3 space-y-2 hidden"></div>
+    </div>
+    <div class="bg-white dark:bg-mt-card rounded-xl border border-gray-100 dark:border-gray-800 p-4">
+      <div class="flex items-center gap-2"><i class="fas fa-edit text-gray-400"></i><input id="orderRemark" type="text" placeholder="订单备注（选填）" class="flex-1 text-sm outline-none dark:bg-transparent dark:text-white dark:placeholder-gray-500"></div>
+    </div>
+    <button onclick="placeOrder()" class="w-full bg-mt text-black font-bold py-3.5 rounded-xl text-lg btn-press">提交订单</button>
+  </div>
+</div>
+
+<!-- ===== 订单追踪 ===== -->
+<div id="page-tracking" class="page pb-20">
+  <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800">
+    <div class="flex items-center gap-3 px-4 py-3">
+      <button onclick="navigate('orders')" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center btn-press"><i class="fas fa-arrow-left text-gray-600 dark:text-gray-300 text-sm"></i></button>
+      <span class="font-bold dark:text-white">订单追踪</span>
+    </div>
+  </div>
+  <div class="px-4 py-6 text-center">
+    <div class="bg-white dark:bg-mt-card rounded-xl border border-gray-100 dark:border-gray-800 p-4 mb-6">
+      <div class="flex items-center gap-3"><div class="w-14 h-14 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-2xl">🛵</div><div class="text-left"><div class="font-bold dark:text-white">骑手正在赶来</div><div class="text-sm text-gray-500 dark:text-gray-400">预计送达: <span id="trackingETA" class="text-mt font-bold"></span></div></div></div>
+    </div>
+    <div id="trackingSteps" class="space-y-0 text-left"></div>
+    <button onclick="navigate('orders')" class="mt-6 bg-mt text-black font-bold px-8 py-2.5 rounded-full text-sm btn-press">查看所有订单</button>
+  </div>
+</div>
+
+<!-- ===== 订单列表 ===== -->
+<div id="page-orders" class="page pb-20">
+  <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800"><div class="px-4 py-3"><h2 class="text-lg font-bold dark:text-white">我的订单</h2></div></div>
+  <div id="orderList" class="px-4 py-4 space-y-3"></div>
+</div>
+
+<!-- ===== 优惠券中心 ===== -->
+<div id="page-coupons" class="page pb-20">
+  <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800">
+    <div class="flex items-center gap-3 px-4 py-3"><button onclick="navigate('home')" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center btn-press"><i class="fas fa-arrow-left text-gray-600 dark:text-gray-300 text-sm"></i></button><span class="font-bold dark:text-white">优惠券中心</span></div>
+  </div>
+  <div class="px-4 py-4 space-y-3" id="couponCenter"></div>
+</div>
+
+<!-- ===== 个人中心 ===== -->
+<div id="page-profile" class="page pb-20">
+  <div class="bg-mt pb-8 pt-6 px-4 relative overflow-hidden">
+    <div class="absolute right-3 top-3 opacity-20 text-8xl">👤</div>
+    <div class="flex items-center gap-4 relative z-10">
+      <div class="w-20 h-20 rounded-full bg-white/30 backdrop-blur flex items-center justify-center text-4xl cursor-pointer overflow-hidden border-4 border-white/50" onclick="showProfileModal()" id="profileAvatarBox">
+        <img id="profileAvatarImg" src="" class="food-img hidden" onerror="this.style.display='none'">
+        <span id="profileAvatarEmoji" class="text-5xl">😊</span>
+      </div>
+      <div class="flex-1 cursor-pointer" onclick="showProfileModal()">
+        <div class="text-xl font-bold text-black" id="profileName">点击设置昵称</div>
+        <div class="text-sm text-black/60 mt-1" id="profilePhone">绑定手机号</div>
+        <div class="flex items-center gap-1 mt-2">
+          <span class="bg-black/20 text-black text-xs px-2 py-0.5 rounded-full">🏅 普通会员</span>
         </div>
       </div>
-      <!-- 状态 -->
-      <div id="trackingSteps" class="space-y-0 text-left"></div>
+      <button onclick="showProfileModal()" class="text-black/60"><i class="fas fa-chevron-right"></i></button>
     </div>
   </div>
 
-  <!-- ========== 订单列表 ========== -->
-  <div id="page-orders" class="page pb-20">
-    <div class="sticky top-0 z-30 bg-white dark:bg-mt-dark border-b border-gray-100 dark:border-gray-800">
-      <div class="px-4 py-3">
-        <h2 class="text-lg font-bold dark:text-white">我的订单</h2>
+  <!-- 数据概览 -->
+  <div class="px-4 -mt-4 relative z-10">
+    <div class="bg-white dark:bg-mt-card rounded-xl border border-gray-100 dark:border-gray-800 flex divide-x divide-gray-100 dark:divide-gray-800">
+      <div class="flex-1 py-3 text-center cursor-pointer" onclick="navigate('orders')">
+        <div class="text-xl font-bold dark:text-white" id="profileOrderCount">0</div>
+        <div class="text-xs text-gray-400 mt-0.5">全部订单</div>
+      </div>
+      <div class="flex-1 py-3 text-center cursor-pointer" onclick="navigate('coupons')">
+        <div class="text-xl font-bold dark:text-white" id="profileCouponCount">0</div>
+        <div class="text-xs text-gray-400 mt-0.5">优惠券</div>
+      </div>
+      <div class="flex-1 py-3 text-center">
+        <div class="text-xl font-bold text-mt" id="profileSaved">¥0</div>
+        <div class="text-xs text-gray-400 mt-0.5">累计节省</div>
       </div>
     </div>
-    <div id="orderList" class="px-4 py-4 space-y-3"></div>
   </div>
 
-  <!-- ========== 底部导航 ========== -->
-  <nav class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white dark:bg-mt-dark border-t border-gray-100 dark:border-gray-800 z-30 flex">
-    <button onclick="navigate('home')" class="nav-btn flex-1 flex flex-col items-center py-2 text-xs gap-1 text-gray-400 dark:text-gray-500 hover:text-mt transition-colors" data-page="home">
-      <i class="fas fa-home text-lg"></i><span>首页</span>
-    </button>
-    <button onclick="navigate('orders')" class="nav-btn flex-1 flex flex-col items-center py-2 text-xs gap-1 text-gray-400 dark:text-gray-500 hover:text-mt transition-colors" data-page="orders">
-      <i class="fas fa-file-alt text-lg"></i><span>订单</span>
-    </button>
-    <button onclick="navigate('home')" class="nav-btn flex-1 flex flex-col items-center py-2 text-xs gap-1 text-gray-400 dark:text-gray-500 hover:text-mt transition-colors" data-page="me">
-      <i class="fas fa-user text-lg"></i><span>我的</span>
-    </button>
-  </nav>
+  <!-- 常用入口 -->
+  <div class="px-4 mt-4">
+    <div class="bg-white dark:bg-mt-card rounded-xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <div class="px-4 py-3 font-bold text-sm dark:text-white border-b border-gray-50 dark:border-gray-800">常用功能</div>
+      <div class="flex flex-wrap">
+        <div class="w-1/4 py-3 flex flex-col items-center gap-1.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors" onclick="navigate('orders')">
+          <div class="w-10 h-10 rounded-full bg-yellow-50 dark:bg-yellow-900/20 flex items-center justify-center text-lg">📋</div>
+          <span class="text-xs text-gray-600 dark:text-gray-400">我的订单</span>
+        </div>
+        <div class="w-1/4 py-3 flex flex-col items-center gap-1.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors" onclick="navigate('coupons')">
+          <div class="w-10 h-10 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-lg">🎫</div>
+          <span class="text-xs text-gray-600 dark:text-gray-400">优惠券</span>
+        </div>
+        <div class="w-1/4 py-3 flex flex-col items-center gap-1.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors" onclick="showAddressModal()">
+          <div class="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-lg">📍</div>
+          <span class="text-xs text-gray-600 dark:text-gray-400">收货地址</span>
+        </div>
+        <div class="w-1/4 py-3 flex flex-col items-center gap-1.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors" onclick="showProfileModal()">
+          <div class="w-10 h-10 rounded-full bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-lg">✏️</div>
+          <span class="text-xs text-gray-600 dark:text-gray-400">编辑资料</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <script>
-// ========== 数据层 ==========
-const restaurants = [
-  {
-    id: 1, name: '老王麻辣烫', category: '中餐', rating: 4.8, monthlySales: 3856,
-    deliveryTime: '30分钟', deliveryFee: '免配送费', minPrice: 20,
-    cover: 'bg-gradient-to-br from-red-500 to-orange-400', emoji: '🍲',
-    tags: ['品牌连锁', '评分最高'],
-    menu: [
-      { cat: '招牌推荐', items: [
-        { id: 101, name: '经典麻辣烫', price: 28, sales: 2134, desc: '自选6荤6素，骨汤熬制', img: '🍜' },
-        { id: 102, name: '肥牛麻辣烫', price: 38, sales: 1876, desc: '澳洲肥牛卷，配上秘制麻辣汤底', img: '🥩' },
-        { id: 103, name: '海鲜麻辣烫', price: 45, sales: 1567, desc: '大虾、鱿鱼、花蛤，鲜香四溢', img: '🦐' },
+  <!-- 更多功能 -->
+  <div class="px-4 mt-4 space-y-3">
+    <div class="bg-white dark:bg-mt-card rounded-xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <div class="divide-y divide-gray-50 dark:divide-gray-800">
+        <div class="px-4 py-3.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors" onclick="navigate('home')">
+          <i class="fas fa-star text-yellow-500"></i><span class="text-sm dark:text-white flex-1">我的收藏</span><span class="text-xs text-gray-400 mr-2">暂无</span><i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+        </div>
+        <div class="px-4 py-3.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors" onclick="toggleChat()">
+          <i class="fas fa-headset text-green-500"></i><span class="text-sm dark:text-white flex-1">联系客服</span><i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+        </div>
+        <div class="px-4 py-3.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors" onclick="toggleDark()">
+          <i class="fas fa-moon text-purple-500"></i><span class="text-sm dark:text-white flex-1">深色模式</span><div class="w-10 h-5 rounded-full bg-gray-300 dark:bg-mt relative cursor-pointer mr-2" onclick="event.stopPropagation();toggleDark()"><div class="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white dark:translate-x-5 transition-transform shadow"></div></div>
+        </div>
+        <div class="px-4 py-3.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+          <i class="fas fa-info-circle text-gray-400"></i><span class="text-sm dark:text-white flex-1">关于美团外卖江大版</span><span class="text-xs text-gray-400 mr-2">v2.0</span><i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+        </div>
+      </div>
+    </div>
+    <div class="text-center text-xs text-gray-400 py-4">美团外卖 · 江苏大学版 · Made with ❤️</div>
+  </div>
+</div>
+
+<!-- ===== 个人资料编辑弹窗 ===== -->
+<div id="profileOverlay" class="fixed inset-0 z-50 overlay hidden" onclick="closeProfileModal()"></div>
+<div id="profileModal" class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto z-50 bg-white dark:bg-mt-dark rounded-t-2xl shadow-2xl transform translate-y-full transition-transform duration-300">
+  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+    <button onclick="closeProfileModal()" class="text-gray-400 text-sm">取消</button>
+    <h3 class="font-bold dark:text-white">编辑个人资料</h3>
+    <button onclick="saveProfile()" class="text-mt font-bold text-sm">保存</button>
+  </div>
+  <div class="p-4 space-y-4">
+    <div class="flex items-center gap-4">
+      <label class="text-xs text-gray-500 dark:text-gray-400 w-16">头像</label>
+      <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-3xl cursor-pointer overflow-hidden" onclick="document.getElementById('profileAvatarInput').click()">
+        <span id="profileEditEmoji">😊</span>
+        <input id="profileAvatarInput" type="file" accept="image/*" class="hidden" onchange="previewAvatar(event)">
+      </div>
+      <span class="text-xs text-gray-400">点击更换头像</span>
+    </div>
+    <div><label class="text-xs text-gray-500 dark:text-gray-400 mb-1 block">昵称</label><input id="profileNickname" type="text" class="w-full bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2.5 text-sm outline-none dark:text-white" placeholder="请输入昵称"></div>
+    <div><label class="text-xs text-gray-500 dark:text-gray-400 mb-1 block">性别</label>
+      <div class="flex gap-2">
+        <button class="gender-btn flex-1 py-2 rounded-lg text-sm bg-gray-100 dark:bg-gray-800 dark:text-white" data-gender="male" onclick="selectGender('male',this)">👨 男</button>
+        <button class="gender-btn flex-1 py-2 rounded-lg text-sm bg-gray-100 dark:bg-gray-800 dark:text-white" data-gender="female" onclick="selectGender('female',this)">👩 女</button>
+        <button class="gender-btn flex-1 py-2 rounded-lg text-sm bg-gray-100 dark:bg-gray-800 dark:text-white" data-gender="secret" onclick="selectGender('secret',this)">🤫 保密</button>
+      </div>
+    </div>
+    <div><label class="text-xs text-gray-500 dark:text-gray-400 mb-1 block">手机号</label><input id="profilePhoneNum" type="tel" class="w-full bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2.5 text-sm outline-none dark:text-white" placeholder="请输入手机号"></div>
+    <div><label class="text-xs text-gray-500 dark:text-gray-400 mb-1 block">个性签名</label><input id="profileBio" type="text" class="w-full bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2.5 text-sm outline-none dark:text-white" placeholder="写一句话介绍自己"></div>
+    <button onclick="saveProfile()" class="w-full bg-mt text-black font-bold py-3 rounded-xl btn-press">保存资料</button>
+  </div>
+</div>
+
+<!-- ===== 地址弹窗 ===== -->
+<div id="addressOverlay" class="fixed inset-0 z-50 overlay hidden" onclick="closeAddressModal()"></div>
+<div id="addressModal" class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto z-50 bg-white dark:bg-mt-dark rounded-t-2xl shadow-2xl transform translate-y-full transition-transform duration-300">
+  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+    <button onclick="closeAddressModal()" class="text-gray-400 text-sm">取消</button><h3 class="font-bold dark:text-white">编辑收货地址</h3><button onclick="saveAddress()" class="text-mt font-bold text-sm">保存</button>
+  </div>
+  <div class="p-4 space-y-3">
+    <div><label class="text-xs text-gray-500 dark:text-gray-400 mb-1 block">收货地址</label><input id="addrInput" type="text" class="w-full bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2.5 text-sm outline-none dark:text-white" placeholder="如：江苏大学A区3号楼"></div>
+    <div><label class="text-xs text-gray-500 dark:text-gray-400 mb-1 block">门牌号（选填）</label><input id="addrDetail" type="text" class="w-full bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2.5 text-sm outline-none dark:text-white" placeholder="如：1201室"></div>
+    <div><label class="text-xs text-gray-500 dark:text-gray-400 mb-1 block">联系人</label><input id="addrContact" type="text" class="w-full bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2.5 text-sm outline-none dark:text-white" placeholder="请输入姓名"></div>
+    <div><label class="text-xs text-gray-500 dark:text-gray-400 mb-1 block">手机号</label><input id="addrPhone" type="tel" class="w-full bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2.5 text-sm outline-none dark:text-white" placeholder="请输入手机号"></div>
+    <button onclick="saveAddress()" class="w-full bg-mt text-black font-bold py-3 rounded-xl btn-press">保存地址</button>
+  </div>
+</div>
+
+<!-- ===== 购物车抽屉 ===== -->
+<div id="cartOverlay" class="fixed inset-0 z-40 overlay hidden" onclick="toggleCart()"></div>
+<div id="cartDrawer" class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto z-50 bg-white dark:bg-mt-dark rounded-t-2xl shadow-2xl transform translate-y-full transition-transform duration-300" style="max-height:65vh">
+  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800"><h3 class="font-bold dark:text-white">购物车</h3><button onclick="clearCart()" class="text-xs text-gray-400">清空</button></div>
+  <div id="cartItems" class="px-4 py-2 overflow-y-auto" style="max-height:calc(65vh - 180px)"></div>
+  <div class="px-4 py-3 border-t border-gray-100 dark:border-gray-800">
+    <div class="flex items-center justify-between mb-3"><span class="text-sm text-gray-500 dark:text-gray-400">小计</span><span class="font-bold text-lg dark:text-white" id="cartSubtotal">¥0.00</span></div>
+    <button onclick="closeCartDrawer();goCheckout();" class="w-full bg-mt text-black font-bold py-3 rounded-xl btn-press" id="cartCheckoutBtn" disabled>去结算</button>
+  </div>
+</div>
+
+<!-- ===== 智能客服 ===== -->
+<div class="fixed z-40" style="bottom:80px;right:max(16px,calc(50% - 240px))">
+  <button onclick="toggleChat()" class="w-14 h-14 rounded-full bg-mt text-black shadow-lg flex flex-col items-center justify-center btn-press chat-fab border-2 border-white dark:border-gray-700">
+    <i class="fas fa-headset text-xl"></i><span class="text-xs font-bold leading-none">客服</span>
+  </button>
+</div>
+<div id="chatOverlay" class="fixed inset-0 z-50 overlay hidden" onclick="toggleChat()"></div>
+<div id="chatWindow" class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto z-50 bg-white dark:bg-mt-dark rounded-t-2xl shadow-2xl transform translate-y-full transition-transform duration-300" style="height:70vh">
+  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800 bg-mt">
+    <div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-sm">🤖</div><div><div class="text-sm font-bold text-black">美团智能客服</div><div class="text-xs text-black/60">在线 · 秒回复</div></div></div>
+    <button onclick="toggleChat()" class="w-7 h-7 rounded-full bg-black/10 flex items-center justify-center text-black"><i class="fas fa-times text-sm"></i></button>
+  </div>
+  <div class="flex-1 overflow-y-auto p-4 space-y-3" id="chatMessages" style="height:calc(70vh - 140px)"></div>
+  <div class="p-3 border-t border-gray-100 dark:border-gray-800 flex gap-2 overflow-x-auto scroll-hide">
+    <button onclick="sendQuickReply('推荐好吃的')" class="text-xs bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-full dark:text-gray-300 btn-press whitespace-nowrap">推荐好吃的</button>
+    <button onclick="sendQuickReply('配送时间')" class="text-xs bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-full dark:text-gray-300 btn-press whitespace-nowrap">配送时间</button>
+    <button onclick="sendQuickReply('优惠券怎么领')" class="text-xs bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-full dark:text-gray-300 btn-press whitespace-nowrap">优惠券</button>
+    <button onclick="sendQuickReply('退款问题')" class="text-xs bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-full dark:text-gray-300 btn-press whitespace-nowrap">退款</button>
+    <button onclick="sendQuickReply('投诉建议')" class="text-xs bg-gray-100 dark:bg-gray-800 px-3 py-2 rounded-full dark:text-gray-300 btn-press whitespace-nowrap">投诉</button>
+  </div>
+  <div class="px-3 pb-3 flex gap-2">
+    <input id="chatInput" type="text" placeholder="输入您的问题..." class="flex-1 bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2.5 text-sm outline-none dark:text-white dark:placeholder-gray-500" onkeydown="if(event.key==='Enter')sendMsg()">
+    <button onclick="sendMsg()" class="w-10 h-10 rounded-full bg-mt flex items-center justify-center text-black font-bold btn-press"><i class="fas fa-paper-plane text-sm"></i></button>
+  </div>
+</div>
+
+<!-- ===== Toast ===== -->
+<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none" style="transform:translate(-50%,0)"></div>
+
+<!-- ===== 底部导航 ===== -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white dark:bg-mt-dark border-t border-gray-100 dark:border-gray-800 z-30 flex">
+  <button onclick="navigate('home')" class="nav-btn flex-1 flex flex-col items-center py-2 text-xs gap-1 text-gray-400 transition-colors active-nav" data-page="home"><i class="fas fa-home text-lg"></i><span>首页</span></button>
+  <button onclick="navigate('orders')" class="nav-btn flex-1 flex flex-col items-center py-2 text-xs gap-1 text-gray-400 transition-colors" data-page="orders"><i class="fas fa-file-alt text-lg"></i><span>订单</span></button>
+  <button onclick="navigate('coupons')" class="nav-btn flex-1 flex flex-col items-center py-2 text-xs gap-1 text-gray-400 transition-colors" data-page="coupons"><i class="fas fa-ticket-alt text-lg"></i><span>优惠</span></button>
+  <button onclick="navigate('profile')" class="nav-btn flex-1 flex flex-col items-center py-2 text-xs gap-1 text-gray-400 transition-colors" data-page="me"><i class="fas fa-user text-lg"></i><span>我的</span></button>
+</nav>
+
+<script>
+// ===== 图片 =====
+function foodImg(id){var m={'1':'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=200&h=200&fit=crop','2':'https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=200&h=200&fit=crop','3':'https://images.unsplash.com/photo-1558857563-b371033873b8?w=200&h=200&fit=crop','4':'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=200&h=200&fit=crop','5':'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=200&h=200&fit=crop','6':'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=200&h=200&fit=crop','7':'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop','8':'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=200&h=200&fit=crop'};return m[id]||m['1'];}
+function restoImg(id){return foodImg(id).replace('200&h=200','400&h=200');}
+
+// ===== 地址 =====
+function getAddress(){var s=localStorage.getItem('mt_address');if(s)try{return JSON.parse(s)}catch(e){}return{addr:'江苏省镇江市学府路301号',detail:'',contact:'',phone:''};}
+function saveAddrToStorage(a){localStorage.setItem('mt_address',JSON.stringify(a));}
+function showAddressModal(){var a=getAddress();document.getElementById('addrInput').value=a.addr;document.getElementById('addrDetail').value=a.detail;document.getElementById('addrContact').value=a.contact;document.getElementById('addrPhone').value=a.phone;document.getElementById('addressOverlay').classList.remove('hidden');document.getElementById('addressModal').classList.remove('translate-y-full');}
+function closeAddressModal(){document.getElementById('addressOverlay').classList.add('hidden');document.getElementById('addressModal').classList.add('translate-y-full');}
+function saveAddress(){saveAddrToStorage({addr:document.getElementById('addrInput').value.trim()||'江苏大学',detail:document.getElementById('addrDetail').value.trim(),contact:document.getElementById('addrContact').value.trim(),phone:document.getElementById('addrPhone').value.trim()});updateAddressDisplay();closeAddressModal();}
+function updateAddressDisplay(){var a=getAddress(),full=a.addr+(a.detail?' '+a.detail:'');['homeAddress','checkoutAddress'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=full;});}
+updateAddressDisplay();
+
+// ===== 优惠券 =====
+var couponTemplates=[{id:'c1',name:'新用户专享',discount:15,minOrder:25,desc:'满¥25可用',color:'from-red-500 to-pink-500'},{id:'c2',name:'满减券',discount:8,minOrder:40,desc:'满¥40可用',color:'from-orange-500 to-yellow-500'},{id:'c3',name:'免配送费',discount:5,minOrder:20,desc:'最高减¥5',color:'from-green-500 to-teal-500'},{id:'c4',name:'夜宵券',discount:10,minOrder:30,desc:'满¥30可用',color:'from-purple-500 to-indigo-500'},{id:'c5',name:'江大专属',discount:6,minOrder:20,desc:'满¥20可用',color:'from-blue-500 to-cyan-500'}];
+function getUserCoupons(){var s=localStorage.getItem('mt_coupons');return s?JSON.parse(s):couponTemplates.slice(0,4);}
+function saveUserCoupons(cs){localStorage.setItem('mt_coupons',JSON.stringify(cs));}
+function getMyCoupons(){return getUserCoupons();}
+function getSelectedCoupon(){var s=localStorage.getItem('mt_selected_coupon');return s?JSON.parse(s):null;}
+function setSelectedCoupon(c){if(c)localStorage.setItem('mt_selected_coupon',JSON.stringify(c));else localStorage.removeItem('mt_selected_coupon');}
+function hasCoupon(id){return getMyCoupons().some(function(c){return c.id===id;});}
+function claimCoupon(id){var tpl=couponTemplates.find(function(c){return c.id===id;});if(!tpl||hasCoupon(id))return;var cs=getMyCoupons();cs.push(tpl);saveUserCoupons(cs);renderCouponBanner();renderCouponCenter();}
+function renderCouponBanner(){var el=document.getElementById('couponBanner'),mine=getMyCoupons();el.innerHTML=mine.slice(0,3).map(function(c){return'<div class="coupon-card rounded-xl px-3 py-2 flex items-center gap-2 flex-shrink-0 cursor-pointer" onclick="applyCouponFromBanner(\''+c.id+'\')"><div class="text-lg">🎫</div><div><div class="text-xs font-bold text-red-600">¥'+c.discount+'</div><div class="text-xs text-gray-500">'+c.desc+'</div></div></div>';}).join('')+'<div class="rounded-xl px-3 py-2 flex items-center gap-2 flex-shrink-0 cursor-pointer bg-gray-100 dark:bg-gray-800" onclick="navigate(\'coupons\')"><div class="text-lg">🎁</div><div class="text-xs font-bold dark:text-white">领更多</div></div>';}
+function renderCouponCenter(){var el=document.getElementById('couponCenter');if(!el)return;var mine=getMyCoupons(),mineIds=mine.map(function(c){return c.id;});el.innerHTML='<div class="bg-white dark:bg-mt-card rounded-xl border border-gray-100 dark:border-gray-800 p-4"><h3 class="font-bold dark:text-white mb-3">我的优惠券 ('+mine.length+')</h3>'+(mine.length===0?'<div class="text-gray-400 text-sm text-center py-4">暂无优惠券</div>':mine.map(function(c){return'<div class="coupon-card rounded-lg p-3 mb-2 flex items-center gap-3"><div class="text-2xl">🎫</div><div class="flex-1"><div class="font-bold text-red-600">¥'+c.discount+' '+c.name+'</div><div class="text-xs text-gray-500">'+c.desc+'</div></div><button onclick="setSelectedCoupon2(\''+c.id+'\')" class="text-xs bg-mt text-black font-bold px-3 py-1 rounded-full btn-press">使用</button></div>';}).join(''))+'</div><div class="bg-white dark:bg-mt-card rounded-xl border border-gray-100 dark:border-gray-800 p-4"><h3 class="font-bold dark:text-white mb-3">可领取</h3>'+(couponTemplates.filter(function(c){return!mineIds.includes(c.id);}).map(function(c){return'<div class="flex items-center gap-3 py-2 border-b border-gray-50 dark:border-gray-800 last:border-0"><div class="w-12 h-12 rounded-lg bg-gradient-to-br '+c.color+' flex items-center justify-center text-white font-bold text-sm">¥'+c.discount+'</div><div class="flex-1"><div class="text-sm font-bold dark:text-white">'+c.name+'</div><div class="text-xs text-gray-400">'+c.desc+'</div></div><button onclick="claimCoupon(\''+c.id+'\')" class="text-xs bg-mt text-black font-bold px-3 py-1 rounded-full btn-press">领取</button></div>';}).join('')||'<div class="text-gray-400 text-sm text-center py-2">已全部领取</div>')+'</div>';}
+function applyCouponFromBanner(id){var c=getMyCoupons().find(function(x){return x.id===id;});if(c){setSelectedCoupon(c);}}
+function setSelectedCoupon2(id){var c=getMyCoupons().find(function(x){return x.id===id;});if(c){setSelectedCoupon(c);}}
+function toggleCouponSelect(){var list=document.getElementById('couponSelectList'),isHidden=list.classList.contains('hidden');if(isHidden){var mine=getMyCoupons();list.innerHTML=mine.length===0?'<div class="text-gray-400 text-sm text-center py-2">暂无可用优惠券</div>':'<button class="w-full text-left text-sm py-2 border-b border-gray-50 dark:border-gray-800 dark:text-gray-300" onclick="setSelectedCoupon(null);toggleCouponSelect();renderCheckoutItems();">不使用优惠券</button>'+mine.map(function(c){return'<button class="w-full text-left text-sm py-2 border-b border-gray-50 dark:border-gray-800 dark:text-gray-300 flex justify-between" onclick="setSelectedCoupon2(\''+c.id+'\');toggleCouponSelect();renderCheckoutItems();"><span>🎫 ¥'+c.discount+' '+c.name+'</span><span class="text-xs text-gray-400">'+c.desc+'</span></button>';}).join('');list.classList.remove('hidden');}else{list.classList.add('hidden');}}
+
+// ===== 数据：每商家8-10道菜 =====
+var restaurants=[
+  {id:1,name:'爱辣啵啵鱼',category:'中餐',rating:4.9,monthlySales:5230,deliveryTime:'30分钟',deliveryFee:'免配送费',minPrice:20,distance:350,avgPrice:30,cover:'bg-gradient-to-br from-red-600 to-orange-500',emoji:'🐟',coverImg:restoImg('1'),tags:['江大必吃榜','后街人气王'],coupons:[{discount:5,desc:'满¥30减5'}],
+    menu:[
+      {cat:'招牌锅底',items:[
+        {id:101,name:'香格里辣啵啵鱼',price:32,sales:2867,desc:'招牌麻辣味，巴沙鱼片+豆芽+豆腐，汤汁浓郁',foodImg:foodImg('1')},
+        {id:102,name:'番茄啵啵鱼',price:30,sales:1987,desc:'酸甜番茄汤底，鱼肉嫩滑，配金针菇',foodImg:foodImg('1')},
+        {id:103,name:'藤椒啵啵鱼',price:34,sales:1678,desc:'藤椒清香麻辣，巴沙鱼+宽粉+木耳',foodImg:foodImg('1')},
+        {id:104,name:'酸菜啵啵鱼',price:33,sales:1456,desc:'老坛酸菜+嫩鱼片，酸辣开胃',foodImg:foodImg('1')},
       ]},
-      { cat: '主食小食', items: [
-        { id: 104, name: '蛋炒饭', price: 12, sales: 987, desc: '粒粒分明，蛋香浓郁', img: '🍚' },
-        { id: 105, name: '炸鸡翅 (5只)', price: 18, sales: 2341, desc: '外酥里嫩，吮指回味', img: '🍗' },
-        { id: 106, name: '酸梅汤', price: 8, sales: 3210, desc: '冰镇解辣，酸甜可口', img: '🥤' },
+      {cat:'配菜主食',items:[
+        {id:105,name:'手工米饭',price:2,sales:5678,desc:'东北大米，粒粒分明',foodImg:foodImg('4')},
+        {id:106,name:'红糖冰粉',price:8,sales:3456,desc:'手工冰粉+红糖花生碎，解辣神器',foodImg:foodImg('1')},
+        {id:107,name:'酸梅汤',price:6,sales:4231,desc:'冰镇解辣，酸甜可口',foodImg:foodImg('1')},
       ]},
     ]
   },
-  {
-    id: 2, name: '张三汉堡', category: '快餐', rating: 4.6, monthlySales: 5678,
-    deliveryTime: '20分钟', deliveryFee: '¥3', minPrice: 15,
-    cover: 'bg-gradient-to-br from-amber-500 to-yellow-400', emoji: '🍔',
-    tags: ['销量冠军'],
-    menu: [
-      { cat: '超值套餐', items: [
-        { id: 201, name: '经典牛肉堡套餐', price: 32, sales: 4321, desc: '牛肉堡+薯条+可乐', img: '🍔' },
-        { id: 202, name: '双层鸡腿堡套餐', price: 38, sales: 3890, desc: '双倍鸡肉，双倍满足', img: '🍗' },
-        { id: 203, name: '鳕鱼堡套餐', price: 35, sales: 2109, desc: '深海鳕鱼，外酥里嫩', img: '🐟' },
+  {id:2,name:'超越火锅鸡',category:'火锅',rating:4.8,monthlySales:4456,deliveryTime:'35分钟',deliveryFee:'¥3',minPrice:25,distance:520,avgPrice:68,cover:'bg-gradient-to-br from-red-700 to-red-400',emoji:'🍗',coverImg:restoImg('2'),tags:['网红店','超高性价比'],coupons:[{discount:10,desc:'满¥80减10'}],
+    menu:[
+      {cat:'火锅鸡套餐',items:[
+        {id:201,name:'经典火锅鸡(双人)',price:68,sales:3456,desc:'整鸡切块+秘制酱料，蔬菜自助',foodImg:foodImg('2')},
+        {id:202,name:'火锅鸡(三人)',price:98,sales:2678,desc:'分量升级，宿舍聚餐首选',foodImg:foodImg('2')},
+        {id:203,name:'火锅鸡+排骨锅',price:108,sales:1567,desc:'双拼锅底，鸡+排骨超满足',foodImg:foodImg('2')},
+        {id:204,name:'火锅鸡+牛蛙锅',price:118,sales:1234,desc:'嫩滑牛蛙遇上秘制鸡锅',foodImg:foodImg('2')},
       ]},
-      { cat: '小食饮品', items: [
-        { id: 204, name: '大薯条', price: 10, sales: 6543, desc: '金黄酥脆，现炸现送', img: '🍟' },
-        { id: 205, name: '圣代冰淇淋', price: 12, sales: 3456, desc: '香草巧克力双拼', img: '🍦' },
-        { id: 206, name: '冰可乐(大)', price: 8, sales: 5432, desc: '加冰爽口', img: '🥤' },
+      {cat:'加菜涮品',items:[
+        {id:205,name:'肥牛卷',price:22,sales:2987,desc:'进口肥牛，涮30秒最佳',foodImg:foodImg('2')},
+        {id:206,name:'虾滑',price:18,sales:2345,desc:'手打虾滑，Q弹鲜甜',foodImg:foodImg('2')},
+        {id:207,name:'蔬菜拼盘',price:12,sales:3456,desc:'时令鲜蔬，六种搭配',foodImg:foodImg('2')},
+        {id:208,name:'手工面条',price:6,sales:2345,desc:'涮锅必备，吸收汤汁',foodImg:foodImg('2')},
       ]},
     ]
   },
-  {
-    id: 3, name: '一点点奶茶', category: '奶茶', rating: 4.9, monthlySales: 8934,
-    deliveryTime: '25分钟', deliveryFee: '免配送费', minPrice: 15,
-    cover: 'bg-gradient-to-br from-pink-500 to-purple-400', emoji: '🧋',
-    tags: ['人气爆棚', '新店特惠'],
-    menu: [
-      { cat: '人气推荐', items: [
-        { id: 301, name: '波霸奶茶', price: 16, sales: 7654, desc: '大颗珍珠Q弹有嚼劲', img: '🧋' },
-        { id: 302, name: '四季奶青', price: 15, sales: 6543, desc: '清爽茶底搭配鲜奶', img: '🍵' },
-        { id: 303, name: '冰淇淋红茶', price: 18, sales: 5432, desc: '红茶+香草冰淇淋', img: '🍦' },
+  {id:3,name:'1点点(江大店)',category:'奶茶',rating:4.9,monthlySales:9230,deliveryTime:'20分钟',deliveryFee:'免配送费',minPrice:12,distance:280,avgPrice:15,cover:'bg-gradient-to-br from-green-600 to-teal-400',emoji:'🧋',coverImg:restoImg('3'),tags:['人气爆棚','458条好评'],coupons:[{discount:3,desc:'满¥15减3'}],
+    menu:[
+      {cat:'人气推荐',items:[
+        {id:301,name:'波霸奶茶',price:14,sales:7654,desc:'大颗珍珠Q弹有嚼劲',foodImg:foodImg('3')},
+        {id:302,name:'四季奶青',price:13,sales:6543,desc:'清爽茶底搭配鲜奶',foodImg:foodImg('3')},
+        {id:303,name:'冰淇淋红茶',price:16,sales:5432,desc:'红茶+香草冰淇淋，江大爆款',foodImg:foodImg('3')},
+        {id:304,name:'波霸奶绿',price:14,sales:4567,desc:'茉莉绿茶+大波霸',foodImg:foodImg('3')},
       ]},
-      { cat: '鲜果系列', items: [
-        { id: 304, name: '葡萄柚绿', price: 20, sales: 4321, desc: '鲜榨葡萄柚+绿茶', img: '🍊' },
-        { id: 305, name: '柠檬养乐多', price: 17, sales: 3456, desc: '清爽解腻', img: '🍋' },
-        { id: 306, name: '芒果冰沙', price: 22, sales: 2987, desc: '新鲜芒果打成冰沙', img: '🥭' },
+      {cat:'鲜果系列',items:[
+        {id:305,name:'葡萄柚绿',price:18,sales:4321,desc:'鲜榨葡萄柚+绿茶',foodImg:foodImg('3')},
+        {id:306,name:'柠檬养乐多',price:15,sales:3456,desc:'清爽解腻，夏日首选',foodImg:foodImg('3')},
+        {id:307,name:'芒果冰沙',price:20,sales:2987,desc:'新鲜芒果打成冰沙',foodImg:foodImg('3')},
+        {id:308,name:'百香果绿茶',price:16,sales:2678,desc:'百香果+绿茶，酸甜清爽',foodImg:foodImg('3')},
       ]},
     ]
   },
-  {
-    id: 4, name: '海底捞火锅', category: '中餐', rating: 4.7, monthlySales: 2100,
-    deliveryTime: '45分钟', deliveryFee: '¥5', minPrice: 50,
-    cover: 'bg-gradient-to-br from-red-600 to-red-400', emoji: '🥘',
-    tags: ['品质保证'],
-    menu: [
-      { cat: '火锅套餐', items: [
-        { id: 401, name: '双人火锅套餐', price: 128, sales: 1567, desc: '肥牛+羊肉+蔬菜拼盘+锅底', img: '🍲' },
-        { id: 402, name: '毛肚火锅套餐', price: 158, sales: 1234, desc: '鲜毛肚+黄喉+鹅肠+锅底', img: '🥘' },
-        { id: 403, name: '海鲜火锅套餐', price: 198, sales: 987, desc: '大虾+鲍鱼+扇贝+锅底', img: '🦞' },
+  {id:4,name:'重庆酸菜鱼',category:'中餐',rating:4.7,monthlySales:3890,deliveryTime:'30分钟',deliveryFee:'¥2',minPrice:20,distance:450,avgPrice:28,cover:'bg-gradient-to-br from-orange-600 to-yellow-500',emoji:'🐟',coverImg:restoImg('4'),tags:['后街老店','川渝风味'],coupons:[{discount:5,desc:'满¥30减5'}],
+    menu:[
+      {cat:'招牌菜品',items:[
+        {id:401,name:'酸菜鱼(小份)',price:38,sales:3456,desc:'嫩滑鱼片+酸菜，豆腐巨嫩',foodImg:foodImg('4')},
+        {id:402,name:'酸菜鱼(大份)',price:58,sales:2345,desc:'分量加倍，两三人够吃',foodImg:foodImg('4')},
+        {id:403,name:'辣椒小炒肉',price:28,sales:1876,desc:'五花肉爆炒辣椒，下饭神器',foodImg:foodImg('4')},
+        {id:404,name:'水煮肉片',price:36,sales:1567,desc:'麻辣鲜香，肉片嫩滑',foodImg:foodImg('4')},
       ]},
-      { cat: '单点菜品', items: [
-        { id: 404, name: '手切肥牛', price: 48, sales: 2345, desc: '澳洲M5和牛', img: '🥩' },
-        { id: 405, name: '虾滑', price: 38, sales: 1876, desc: '手打虾滑，Q弹爽滑', img: '🦐' },
-        { id: 406, name: '菌菇拼盘', price: 28, sales: 1654, desc: '多种鲜菌', img: '🍄' },
+      {cat:'家常小炒',items:[
+        {id:405,name:'牛柳炒时蔬',price:32,sales:1567,desc:'先炸后炒，外酥里嫩',foodImg:foodImg('4')},
+        {id:406,name:'麻婆豆腐',price:16,sales:2987,desc:'正宗川味麻婆豆腐',foodImg:foodImg('4')},
+        {id:407,name:'蛋炒饭',price:10,sales:3456,desc:'粒粒分明，蛋香浓郁',foodImg:foodImg('4')},
+        {id:408,name:'酸辣土豆丝',price:14,sales:2345,desc:'爽脆酸辣，经典下饭菜',foodImg:foodImg('4')},
       ]},
     ]
   },
-  {
-    id: 5, name: '樱花日料', category: '日料', rating: 4.8, monthlySales: 1230,
-    deliveryTime: '35分钟', deliveryFee: '免配送费', minPrice: 30,
-    cover: 'bg-gradient-to-br from-pink-400 to-rose-300', emoji: '🍣',
-    tags: ['精致日料'],
-    menu: [
-      { cat: '刺身寿司', items: [
-        { id: 501, name: '三文鱼刺身', price: 68, sales: 876, desc: '挪威空运三文鱼，厚切8片', img: '🍣' },
-        { id: 502, name: '综合寿司拼盘', price: 88, sales: 654, desc: '12贯不同口味', img: '🍱' },
-        { id: 503, name: '金枪鱼手卷', price: 28, sales: 432, desc: '蓝鳍金枪鱼+醋饭', img: '🌯' },
+  {id:5,name:'小春鹤',category:'日料',rating:4.8,monthlySales:1890,deliveryTime:'35分钟',deliveryFee:'免配送费',minPrice:25,distance:680,avgPrice:25,cover:'bg-gradient-to-br from-amber-600 to-yellow-300',emoji:'🍱',coverImg:restoImg('5'),tags:['精致日料','定食必点'],coupons:[{discount:8,desc:'满¥40减8'}],
+    menu:[
+      {cat:'定食套餐',items:[
+        {id:501,name:'咖喱鸡排定食',price:32,sales:1234,desc:'酥脆鸡排+咖喱酱+米饭+味增汤',foodImg:foodImg('5')},
+        {id:502,name:'照烧鸡腿定食',price:30,sales:987,desc:'去骨鸡腿，照烧酱汁浓郁',foodImg:foodImg('5')},
+        {id:503,name:'熏鸡肉沙拉',price:26,sales:876,desc:'烟熏鸡肉+时蔬，健康轻食',foodImg:foodImg('5')},
+        {id:504,name:'炸猪排定食',price:35,sales:765,desc:'厚切猪排+芝麻酱+卷心菜',foodImg:foodImg('5')},
       ]},
-      { cat: '热食', items: [
-        { id: 504, name: '日式拉面', price: 38, sales: 1234, desc: '豚骨汤底，溏心蛋+叉烧', img: '🍜' },
-        { id: 505, name: '天妇罗拼盘', price: 42, sales: 987, desc: '虾+蔬菜天妇罗', img: '🍤' },
-        { id: 506, name: '照烧鸡腿饭', price: 35, sales: 1567, desc: '去骨鸡腿，照烧酱汁', img: '🍗' },
+      {cat:'小食饮品',items:[
+        {id:505,name:'唐扬炸鸡块',price:18,sales:1567,desc:'日式炸鸡，外酥内多汁',foodImg:foodImg('5')},
+        {id:506,name:'可尔必思',price:10,sales:2345,desc:'日式乳酸菌饮品',foodImg:foodImg('5')},
+        {id:507,name:'抹茶大福(2个)',price:12,sales:1890,desc:'日式抹茶糯米糍',foodImg:foodImg('5')},
+        {id:508,name:'章鱼小丸子(6个)',price:16,sales:2109,desc:'外酥里嫩，木鱼花跳舞',foodImg:foodImg('5')},
       ]},
     ]
   },
-  {
-    id: 6, name: '东北烧烤王', category: '烧烤', rating: 4.5, monthlySales: 3400,
-    deliveryTime: '40分钟', deliveryFee: '¥3', minPrice: 25,
-    cover: 'bg-gradient-to-br from-orange-700 to-amber-500', emoji: '🍖',
-    tags: ['深夜食堂'],
-    menu: [
-      { cat: '烤串必点', items: [
-        { id: 601, name: '羊肉串 (10串)', price: 35, sales: 3456, desc: '呼伦贝尔羊肉，秘制调料', img: '🍢' },
-        { id: 602, name: '牛肉串 (10串)', price: 38, sales: 2987, desc: '精选牛里脊，鲜嫩多汁', img: '🥩' },
-        { id: 603, name: '烤鸡翅 (5只)', price: 22, sales: 2345, desc: '蜜汁口味', img: '🍗' },
-        { id: 604, name: '烤茄子', price: 12, sales: 1890, desc: '蒜蓉粉丝烤茄子', img: '🍆' },
+  {id:6,name:'阿兴哥烧烤',category:'烧烤',rating:4.6,monthlySales:4120,deliveryTime:'40分钟',deliveryFee:'¥3',minPrice:20,distance:850,avgPrice:35,cover:'bg-gradient-to-br from-orange-800 to-amber-600',emoji:'🍖',coverImg:restoImg('6'),tags:['深夜食堂','小龙虾'],coupons:[{discount:6,desc:'满¥40减6'}],
+    menu:[
+      {cat:'烤串必点',items:[
+        {id:601,name:'羊肉串(10串)',price:30,sales:3456,desc:'秘制调料，炭火现烤',foodImg:foodImg('6')},
+        {id:602,name:'牛肉串(10串)',price:35,sales:2987,desc:'精选牛里脊，鲜嫩多汁',foodImg:foodImg('6')},
+        {id:603,name:'烤鸡翅(5只)',price:20,sales:2345,desc:'蜜汁口味，外焦里嫩',foodImg:foodImg('6')},
+        {id:604,name:'烤茄子',price:10,sales:1890,desc:'蒜蓉粉丝烤茄子',foodImg:foodImg('6')},
+        {id:605,name:'烤五花肉(5串)',price:25,sales:2109,desc:'肥瘦相间，焦香四溢',foodImg:foodImg('6')},
+      ]},
+      {cat:'特色大菜',items:[
+        {id:606,name:'麻辣小龙虾(小)',price:58,sales:1678,desc:'江苏本地龙虾，香辣入味',foodImg:foodImg('6')},
+        {id:607,name:'烤鱼',price:48,sales:1234,desc:'整条烤鱼配时蔬',foodImg:foodImg('6')},
+        {id:608,name:'锡纸花甲粉',price:28,sales:1876,desc:'花甲+粉丝+金针菇',foodImg:foodImg('6')},
       ]},
     ]
   },
-  {
-    id: 7, name: '甜蜜时光蛋糕', category: '甜品', rating: 4.9, monthlySales: 4567,
-    deliveryTime: '30分钟', deliveryFee: '免配送费', minPrice: 20,
-    cover: 'bg-gradient-to-br from-pink-300 to-purple-300', emoji: '🍰',
-    tags: ['网红店'],
-    menu: [
-      { cat: '招牌蛋糕', items: [
-        { id: 701, name: '提拉米苏', price: 32, sales: 2345, desc: '意大利经典，咖啡酒香浓郁', img: '🍰' },
-        { id: 702, name: '芒果千层', price: 28, sales: 1987, desc: '薄如蝉翼的千层皮+鲜芒果', img: '🥞' },
-        { id: 703, name: '黑森林蛋糕', price: 35, sales: 1678, desc: '三层巧克力海绵蛋糕', img: '🎂' },
+  {id:7,name:'徐州鸡蛋灌饼',category:'快餐',rating:4.9,monthlySales:6780,deliveryTime:'15分钟',deliveryFee:'免配送费',minPrice:8,distance:200,avgPrice:8,cover:'bg-gradient-to-br from-yellow-500 to-orange-400',emoji:'🫓',coverImg:restoImg('7'),tags:['后街排队王','江大早餐'],coupons:[{discount:2,desc:'满¥10减2'}],
+    menu:[
+      {cat:'招牌灌饼',items:[
+        {id:701,name:'原味鸡蛋灌饼',price:8,sales:5678,desc:'先煎后烤，外酥里嫩，香脆可口',foodImg:foodImg('7')},
+        {id:702,name:'加里脊灌饼',price:12,sales:4567,desc:'灌饼+里脊肉，荤素搭配',foodImg:foodImg('7')},
+        {id:703,name:'加烤肠灌饼',price:10,sales:3890,desc:'灌饼+烤肠，经典搭配',foodImg:foodImg('7')},
+        {id:704,name:'全家福灌饼',price:15,sales:2345,desc:'里脊+烤肠+鸡蛋+生菜',foodImg:foodImg('7')},
       ]},
-      { cat: '面包', items: [
-        { id: 704, name: '可颂 (3个)', price: 18, sales: 3456, desc: '法式黄油可颂', img: '🥐' },
-        { id: 705, name: '北海道吐司', price: 22, sales: 2890, desc: '手工揉制，奶香柔软', img: '🍞' },
+      {cat:'饮品',items:[
+        {id:705,name:'现磨豆浆',price:4,sales:4567,desc:'黄豆现磨，香甜浓郁',foodImg:foodImg('7')},
+        {id:706,name:'绿豆沙',price:6,sales:3456,desc:'冰镇绿豆沙，夏天必备',foodImg:foodImg('7')},
+        {id:707,name:'皮蛋瘦肉粥',price:8,sales:2345,desc:'料足味鲜，暖胃首选',foodImg:foodImg('7')},
       ]},
     ]
   },
-  {
-    id: 8, name: '兰州拉面馆', category: '中餐', rating: 4.6, monthlySales: 6700,
-    deliveryTime: '25分钟', deliveryFee: '¥2', minPrice: 15,
-    cover: 'bg-gradient-to-br from-green-600 to-emerald-400', emoji: '🍜',
-    tags: ['老字号'],
-    menu: [
-      { cat: '面食', items: [
-        { id: 801, name: '兰州牛肉面', price: 18, sales: 4567, desc: '一清二白三红四绿五黄', img: '🍜' },
-        { id: 802, name: '大盘鸡拌面', price: 32, sales: 3456, desc: '新疆大盘鸡配宽面', img: '🍝' },
-        { id: 803, name: '油泼面', price: 15, sales: 2987, desc: '陕西风味，辣椒香气扑鼻', img: '🌶️' },
+  {id:8,name:'湖南菜馆',category:'中餐',rating:4.7,monthlySales:3560,deliveryTime:'30分钟',deliveryFee:'¥2',minPrice:18,distance:600,avgPrice:26,cover:'bg-gradient-to-br from-red-800 to-red-500',emoji:'🌶️',coverImg:restoImg('8'),tags:['新晋之秀','湘味正宗'],coupons:[{discount:6,desc:'满¥30减6'}],
+    menu:[
+      {cat:'招牌湘菜',items:[
+        {id:801,name:'辣椒炒肉',price:26,sales:2987,desc:'湖南正宗辣椒炒肉，又辣又香',foodImg:foodImg('8')},
+        {id:802,name:'小炒黄牛肉',price:38,sales:2345,desc:'嫩黄牛肉爆炒，小米辣提味',foodImg:foodImg('8')},
+        {id:803,name:'剁椒鱼头',price:48,sales:1678,desc:'胖头鱼+湖南剁椒，鲜辣入味',foodImg:foodImg('8')},
+        {id:804,name:'农家小炒肉',price:24,sales:1987,desc:'青椒+五花肉，地道湖南味',foodImg:foodImg('8')},
       ]},
-      { cat: '小菜', items: [
-        { id: 804, name: '凉皮', price: 10, sales: 3456, desc: '酸辣爽口', img: '🥗' },
-        { id: 805, name: '肉夹馍', price: 12, sales: 4321, desc: '老潼关肉夹馍', img: '🥙' },
+      {cat:'主食',items:[
+        {id:805,name:'湖南米粉',price:14,sales:3456,desc:'骨汤米粉，酸豆角+花生',foodImg:foodImg('8')},
+        {id:806,name:'米饭',price:2,sales:5678,desc:'标配白米饭',foodImg:foodImg('8')},
+        {id:807,name:'蒜蓉空心菜',price:16,sales:1876,desc:'新鲜时蔬，蒜香浓郁',foodImg:foodImg('8')},
       ]},
     ]
   },
 ];
 
-// 构建全局物品索引，方便按ID查找
-const allItems = {};
-restaurants.forEach(r => {
-  r.menu.forEach(cat => {
-    cat.items.forEach(item => {
-      allItems[item.id] = { ...item, restaurantId: r.id, restaurantName: r.name };
-    });
-  });
-});
+// 物品索引
+var allItems={};
+restaurants.forEach(function(r){r.menu.forEach(function(cat){cat.items.forEach(function(item){allItems[item.id]={id:item.id,name:item.name,price:item.price,img:item.foodImg||foodImg(String(r.id)),emoji:item.emoji||'🍽️',restaurantId:r.id,restaurantName:r.name,foodImg:item.foodImg};});});});
 
-// ========== 状态 ==========
-const state = {
-  currentPage: 'home',
-  currentRestaurantId: null,
-  currentOrderId: null,
-  currentSort: 'rating',
-  currentCat: 'all',
-  cart: [],
-  orders: JSON.parse(localStorage.getItem('mt_orders') || '[]'),
-  menuCat: null,
-};
+// ===== 状态 =====
+var state={currentPage:'home',currentRestaurantId:null,currentOrderId:null,currentSort:'distance',currentCat:'all',cart:[],orders:JSON.parse(localStorage.getItem('mt_orders')||'[]'),menuCat:null,filters:{price:'all',time:'all',dist:'all'},profileGender:'secret',profileAvatarData:''};
+function saveOrders(){localStorage.setItem('mt_orders',JSON.stringify(state.orders));}
 
-function saveOrders() {
-  localStorage.setItem('mt_orders', JSON.stringify(state.orders));
-}
+// ===== 筛选 =====
+function toggleFilterPanel(){document.getElementById('filterPanel').classList.toggle('hidden');}
+function resetFilters(){state.filters={price:'all',time:'all',dist:'all'};document.querySelectorAll('.filter-price,.filter-time,.filter-dist').forEach(function(b){b.classList.remove('bg-mt','text-black','font-bold');b.classList.add('bg-white','dark:bg-gray-700','text-gray-600','dark:text-gray-300');});document.querySelectorAll('.filter-price[data-price="all"],.filter-time[data-time="all"],.filter-dist[data-dist="all"]').forEach(function(b){b.classList.add('bg-mt','text-black','font-bold');b.classList.remove('bg-white','dark:bg-gray-700','text-gray-600','dark:text-gray-300');});updateFilterDot();renderRestaurantList();}
+function updateFilterDot(){var a=state.filters.price!=='all'||state.filters.time!=='all'||state.filters.dist!=='all';document.getElementById('filterDot').classList.toggle('hidden',!a);}
+function applyFilters(list){var f=list.slice();if(state.filters.price!=='all'){f=f.filter(function(r){if(state.filters.price==='low')return r.avgPrice<15;if(state.filters.price==='mid')return r.avgPrice>=15&&r.avgPrice<=30;if(state.filters.price==='high')return r.avgPrice>30;return true;});}if(state.filters.time!=='all'){f=f.filter(function(r){var t=parseInt(r.deliveryTime);if(state.filters.time==='fast')return t<=30;if(state.filters.time==='mid')return t>30&&t<=40;return true;});}if(state.filters.dist!=='all'){f=f.filter(function(r){if(state.filters.dist==='near')return r.distance<=500;if(state.filters.dist==='mid')return r.distance>500&&r.distance<=1000;if(state.filters.dist==='far')return r.distance>1000;return true;});}return f;}
+function formatDist(m){return m<1000?m+'m':(m/1000).toFixed(1)+'km';}
 
-// ========== 购物车 ==========
-function getCartCount() {
-  return state.cart.reduce((sum, i) => sum + i.qty, 0);
-}
+document.querySelectorAll('.filter-price').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.filter-price').forEach(function(x){x.classList.remove('bg-mt','text-black','font-bold');x.classList.add('bg-white','dark:bg-gray-700','text-gray-600','dark:text-gray-300');});this.classList.add('bg-mt','text-black','font-bold');this.classList.remove('bg-white','dark:bg-gray-700','text-gray-600','dark:text-gray-300');state.filters.price=this.dataset.price;updateFilterDot();renderRestaurantList();});});
+document.querySelectorAll('.filter-time').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.filter-time').forEach(function(x){x.classList.remove('bg-mt','text-black','font-bold');x.classList.add('bg-white','dark:bg-gray-700','text-gray-600','dark:text-gray-300');});this.classList.add('bg-mt','text-black','font-bold');this.classList.remove('bg-white','dark:bg-gray-700','text-gray-600','dark:text-gray-300');state.filters.time=this.dataset.time;updateFilterDot();renderRestaurantList();});});
+document.querySelectorAll('.filter-dist').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.filter-dist').forEach(function(x){x.classList.remove('bg-mt','text-black','font-bold');x.classList.add('bg-white','dark:bg-gray-700','text-gray-600','dark:text-gray-300');});this.classList.add('bg-mt','text-black','font-bold');this.classList.remove('bg-white','dark:bg-gray-700','text-gray-600','dark:text-gray-300');state.filters.dist=this.dataset.dist;updateFilterDot();renderRestaurantList();});});
 
-function getCartTotal() {
-  return state.cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-}
+// ===== 购物车 =====
+function getCartCount(){return state.cart.reduce(function(s,i){return s+i.qty;},0);}
+function getCartTotal(){return state.cart.reduce(function(s,i){return s+i.price*i.qty;},0);}
+function getCartItem(id){return state.cart.find(function(i){return i.id===id;});}
+function addToCart(itemId){var item=allItems[itemId];if(!item)return;var ex=getCartItem(itemId);if(ex){ex.qty++;}else{state.cart.push({id:item.id,name:item.name,price:item.price,foodImg:item.foodImg,emoji:item.emoji||'🍽️',qty:1,restaurantId:item.restaurantId});}refreshUI();showToast(item.name+' 已加入购物车');}
+function removeFromCart(itemId){var ex=getCartItem(itemId);if(!ex)return;if(ex.qty>1){ex.qty--;}else{state.cart=state.cart.filter(function(i){return i.id!==itemId;});}refreshUI();}
+function clearCart(){state.cart=[];setSelectedCoupon(null);refreshUI();closeCartDrawer();}
+function refreshUI(){updateCartBar();updateAllBadges();if(state.currentPage==='restaurant')renderMenuItems();renderCartItems();if(state.currentPage==='checkout')renderCheckoutItems();}
+function updateAllBadges(){var c=getCartCount();['homeCartBadge','restoCartBadge','cartCountBadge'].forEach(function(id){var el=document.getElementById(id);if(el){el.textContent=c;el.style.display=c>0?'flex':'none';}});var cartCheckoutBtn=document.getElementById('cartCheckoutBtn');if(cartCheckoutBtn){cartCheckoutBtn.disabled=c===0;cartCheckoutBtn.classList.toggle('opacity-50',c===0);}}
+function updateCartBar(){var bar=document.getElementById('cartBar');var totalEl=document.getElementById('cartTotal');var btn=document.getElementById('checkoutBtn');var c=getCartCount();if(bar)bar.style.display=state.currentPage==='restaurant'?'flex':'none';if(totalEl)totalEl.textContent='¥'+getCartTotal().toFixed(2);if(btn){btn.disabled=c===0;btn.classList.toggle('opacity-50',c===0);}}
 
-function getCartItem(itemId) {
-  return state.cart.find(i => i.id === itemId);
-}
+// ===== 购物车抽屉 =====
+function toggleCart(){var o=document.getElementById('cartOverlay'),d=document.getElementById('cartDrawer');if(!o||!d)return;if(!d.classList.contains('translate-y-full')){closeCartDrawer();}else{if(state.cart.length===0)return;renderCartItems();o.classList.remove('hidden');d.classList.remove('translate-y-full');}}
+function closeCartDrawer(){document.getElementById('cartOverlay').classList.add('hidden');document.getElementById('cartDrawer').classList.add('translate-y-full');}
+function renderCartItems(){var c=document.getElementById('cartItems'),sub=document.getElementById('cartSubtotal');if(!c)return;c.innerHTML=state.cart.length===0?'<div class="text-center text-gray-400 py-8">购物车是空的</div>':state.cart.map(function(item){return'<div class="flex items-center gap-3 py-3 border-b border-gray-50 dark:border-gray-800"><div class="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-2xl flex-shrink-0 overflow-hidden"><img src="'+item.foodImg+'" class="food-img" onerror="this.parentElement.innerHTML=\'<span>'+item.emoji+'</span>\'" loading="lazy"></div><div class="flex-1 min-w-0"><div class="text-sm font-medium dark:text-white truncate">'+item.name+'</div><div class="text-xs text-mt font-bold">¥'+item.price+'</div></div><div class="flex items-center gap-2"><button data-action="remove" data-item-id="'+item.id+'" class="cart-btn w-7 h-7 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-500 text-sm font-bold">−</button><span class="w-5 text-center text-sm font-bold dark:text-white">'+item.qty+'</span><button data-action="add" data-item-id="'+item.id+'" class="cart-btn w-7 h-7 rounded-full bg-mt flex items-center justify-center text-black font-bold text-sm">+</button></div></div>';}).join('');if(sub)sub.textContent='¥'+getCartTotal().toFixed(2);}
+document.getElementById('cartItems').addEventListener('click',function(e){var btn=e.target.closest('.cart-btn');if(!btn)return;var id=parseInt(btn.dataset.itemId);if(btn.dataset.action==='add')addToCart(id);if(btn.dataset.action==='remove')removeFromCart(id);});
 
-function addToCart(itemId) {
-  const item = allItems[itemId];
-  if (!item) return;
-
-  const existing = getCartItem(itemId);
-  if (existing) {
-    existing.qty++;
-  } else {
-    state.cart.push({ id: item.id, name: item.name, price: item.price, img: item.img, qty: 1, restaurantId: item.restaurantId });
+// ===== 路由 =====
+function navigate(page,data){
+  if(data!==undefined&&page==='restaurant')state.currentRestaurantId=data;
+  if(data!==undefined&&page==='tracking')state.currentOrderId=data;
+  if(page==='checkout'&&state.cart.length===0){page=state.currentRestaurantId?'restaurant':'home';}
+  state.currentPage=page;
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  var bar=document.getElementById('cartBar');
+  switch(page){
+    case'home':document.getElementById('page-home').classList.add('active');if(bar)bar.style.display='none';renderRestaurantList();renderRecommend();break;
+    case'restaurant':document.getElementById('page-restaurant').classList.add('active');if(bar)bar.style.display='flex';renderRestaurantDetail();updateCartBar();break;
+    case'checkout':document.getElementById('page-checkout').classList.add('active');if(bar)bar.style.display='none';updateAddressDisplay();renderCheckoutItems();break;
+    case'tracking':document.getElementById('page-tracking').classList.add('active');if(bar)bar.style.display='none';renderTracking();break;
+    case'orders':document.getElementById('page-orders').classList.add('active');if(bar)bar.style.display='none';renderOrders();break;
+    case'coupons':document.getElementById('page-coupons').classList.add('active');if(bar)bar.style.display='none';renderCouponCenter();break;
+    case'profile':document.getElementById('page-profile').classList.add('active');if(bar)bar.style.display='none';renderProfile();break;
   }
-  refreshUI();
+  updateNavHighlight();updateAllBadges();window.scrollTo(0,0);
+}
+function goCheckout(){if(state.cart.length>0)navigate('checkout');}
+function updateNavHighlight(){document.querySelectorAll('.nav-btn').forEach(function(btn){var p=btn.dataset.page;var a=p===state.currentPage||(['restaurant','checkout'].indexOf(state.currentPage)>-1&&p==='home')||(state.currentPage==='tracking'&&p==='orders')||(state.currentPage==='profile'&&p==='me');btn.classList.toggle('active-nav',a);if(a){btn.classList.add('text-mt');btn.classList.remove('text-gray-400','dark:text-gray-500');}else{btn.classList.remove('text-mt');btn.classList.add('text-gray-400','dark:text-gray-500');}});}
+
+// ===== 推荐 =====
+function renderRecommend(){
+  var el=document.getElementById('recommendList');if(!el)return;
+  var picks=[];restaurants.forEach(function(r){if(r.menu[0]&&r.menu[0].items[0])picks.push({item:r.menu[0].items[0],restoId:r.id});});
+  picks.sort(function(){return Math.random()-0.5;});picks=picks.slice(0,6);
+  el.innerHTML=picks.map(function(p){var item=p.item;
+    return'<div class="flex-shrink-0 w-36 bg-white dark:bg-mt-card rounded-xl border border-gray-100 dark:border-gray-800 overflow-hidden cursor-pointer hover:shadow-md transition-shadow" onclick="navigate(\'restaurant\','+p.restoId+')"><div class="h-24 bg-gray-100 dark:bg-gray-800 overflow-hidden"><img src="'+item.foodImg+'" class="food-img" onerror="this.parentElement.innerHTML=\'<span class=text-4xl>🍽️</span>\'" loading="lazy"></div><div class="p-2"><div class="text-xs font-bold dark:text-white truncate">'+item.name+'</div><div class="text-xs text-mt font-bold mt-1">¥'+item.price+'</div></div></div>';
+  }).join('');
 }
 
-function removeFromCart(itemId) {
-  const existing = getCartItem(itemId);
-  if (!existing) return;
-  if (existing.qty > 1) {
-    existing.qty--;
-  } else {
-    state.cart = state.cart.filter(i => i.id !== itemId);
-  }
-  refreshUI();
+// ===== 首页 =====
+function renderRestaurantList(){
+  var c=document.getElementById('restaurantList');if(!c)return;
+  var f=restaurants.slice();
+  if(state.currentCat!=='all')f=f.filter(function(r){return r.category===state.currentCat;});
+  if(state.searchQuery){var q=state.searchQuery.toLowerCase();f=f.filter(function(r){return r.name.toLowerCase().indexOf(q)>-1||r.category.indexOf(q)>-1;});}
+  f=applyFilters(f);
+  f.sort(function(a,b){if(state.currentSort==='distance')return a.distance-b.distance;if(state.currentSort==='rating')return b.rating-a.rating;if(state.currentSort==='sales')return b.monthlySales-a.monthlySales;return 0;});
+  c.innerHTML=f.length?f.map(function(r){return'<div data-restaurant-id="'+r.id+'" class="restaurant-card bg-white dark:bg-mt-card rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800 cursor-pointer hover:shadow-md transition-shadow"><div class="'+r.cover+' h-32 relative flex items-center justify-center overflow-hidden"><img src="'+r.coverImg+'" class="food-img absolute inset-0 w-full h-full opacity-90" onerror="this.style.display=\'none\'" loading="lazy"><span class="text-5xl relative z-10">'+r.emoji+'</span><div class="absolute top-2 left-2 flex gap-1 z-10">'+r.tags.map(function(t){return'<span class="bg-black/30 backdrop-blur text-white text-xs px-2 py-0.5 rounded-full">'+t+'</span>';}).join('')+'</div><div class="absolute bottom-2 left-2 bg-black/40 backdrop-blur text-white text-xs px-2 py-0.5 rounded-full z-10">'+formatDist(r.distance)+'</div><div class="absolute bottom-2 right-2 bg-black/40 backdrop-blur text-white text-xs px-2 py-0.5 rounded-full z-10">'+r.deliveryTime+'</div></div><div class="p-3"><div class="flex items-center justify-between"><h3 class="font-bold dark:text-white truncate">'+r.name+'</h3><span class="text-xs text-green-600 bg-green-50 dark:bg-green-900/30 dark:text-green-400 px-1.5 py-0.5 rounded whitespace-nowrap">'+r.deliveryFee+'</span></div><div class="flex items-center gap-2 mt-1"><span class="text-yellow-500 text-xs">★ '+r.rating+'</span><span class="text-gray-400 text-xs">月售'+r.monthlySales+'</span><span class="text-gray-400 text-xs">'+formatDist(r.distance)+'</span></div><div class="text-xs text-gray-400 mt-1">起送¥'+r.minPrice+' · 人均¥'+r.avgPrice+'</div>'+(r.coupons?'<div class="mt-1.5 flex gap-1">'+r.coupons.map(function(cp){return'<span class="text-xs text-red-500 bg-red-50 dark:bg-red-900/20 px-1.5 py-0.5 rounded">'+cp.desc+'</span>';}).join('')+'</div>':'')+'</div></div>';}).join(''):'<div class="text-center text-gray-400 py-16">没有找到商家</div>';
 }
 
-function clearCart() {
-  state.cart = [];
-  refreshUI();
-  closeCartDrawer();
+document.getElementById('restaurantList').addEventListener('click',function(e){var card=e.target.closest('.restaurant-card');if(!card)return;var id=parseInt(card.dataset.restaurantId);if(id)navigate('restaurant',id);});
+
+// ===== 商家详情 =====
+function renderRestaurantDetail(){
+  var r=restaurants.find(function(x){return x.id===state.currentRestaurantId;});if(!r)return navigate('home');
+  document.getElementById('restoName').textContent=r.name;
+  document.getElementById('restoHeader').className=r.cover+' h-48 relative flex items-center justify-center overflow-hidden';
+  document.getElementById('restoHeader').innerHTML='<img src="'+r.coverImg+'" class="food-img absolute inset-0 w-full h-full opacity-90" onerror="this.style.display=\'none\'" loading="lazy"><span class="text-7xl relative z-10">'+r.emoji+'</span>';
+  document.getElementById('restoTitle').textContent=r.name;document.getElementById('restoRating').textContent=r.rating+' 分';
+  document.getElementById('restoSales').textContent=r.monthlySales;document.getElementById('restoDist').textContent='· '+formatDist(r.distance);
+  document.getElementById('restoTime').textContent=r.deliveryTime;document.getElementById('restoFee').textContent=r.deliveryFee;
+  document.getElementById('restoMin').textContent=r.minPrice;
+  document.getElementById('restoCoupons').innerHTML=(r.coupons||[]).map(function(cp){return'<span class="text-xs text-red-500 bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-full">🎫 '+cp.desc+'</span>';}).join('');
+  var tabs=document.getElementById('menuTabs');state.menuCat=r.menu[0].cat;
+  tabs.innerHTML=r.menu.map(function(cat,i){return'<button data-cat="'+cat.cat+'" class="menu-tab flex-1 text-center py-2.5 text-xs font-bold border-b-2 whitespace-nowrap px-3 transition-colors '+(i===0?'border-mt text-mt':'border-transparent text-gray-500 dark:text-gray-400')+'">'+cat.cat+'</button>';}).join('');
+  renderMenuItems();updateCartBar();
 }
 
-// ========== UI 刷新 ==========
-function refreshUI() {
-  updateCartBar();
-  updateCartBadge();
-  if (state.currentPage === 'restaurant') renderMenuItems();
-  renderCartItems();
-  renderCheckoutItems();
+document.getElementById('menuTabs').addEventListener('click',function(e){var tab=e.target.closest('.menu-tab');if(!tab)return;state.menuCat=tab.dataset.cat;document.querySelectorAll('.menu-tab').forEach(function(t){t.classList.remove('border-mt','text-mt');t.classList.add('border-transparent','text-gray-500','dark:text-gray-400');});tab.classList.add('border-mt','text-mt');tab.classList.remove('border-transparent','text-gray-500','dark:text-gray-400');renderMenuItems();});
+
+function renderMenuItems(){
+  var r=restaurants.find(function(x){return x.id===state.currentRestaurantId;});if(!r)return;
+  var cat=r.menu.find(function(c){return c.cat===state.menuCat;});if(!cat){state.menuCat=r.menu[0].cat;cat=r.menu[0];}
+  document.getElementById('menuList').innerHTML='<div class="text-sm font-bold text-gray-400 dark:text-gray-500 mb-2">'+state.menuCat+' ('+cat.items.length+'道)</div>'+cat.items.map(function(item){var ci=getCartItem(item.id),q=ci?ci.qty:0;return'<div class="flex gap-3 py-3 border-b border-gray-50 dark:border-gray-800"><div class="w-20 h-20 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0 overflow-hidden"><img src="'+item.foodImg+'" class="food-img" onerror="this.parentElement.innerHTML=\'<span class=text-4xl>🍽️</span>\'" loading="lazy"></div><div class="flex-1 min-w-0"><div class="text-sm font-bold dark:text-white">'+item.name+'</div><div class="text-xs text-gray-400 mt-0.5 line-clamp-2">'+item.desc+'</div><div class="text-xs text-gray-400 mt-1">月售'+item.sales+'</div><div class="flex items-center justify-between mt-1.5"><span class="text-mt font-bold text-base">¥'+item.price+'</span><div class="flex items-center gap-2">'+(q>0?'<button data-action="remove" data-item-id="'+item.id+'" class="menu-btn w-7 h-7 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-500 text-sm font-bold">−</button><span class="text-sm font-bold dark:text-white w-4 text-center">'+q+'</span>':'')+'<button data-action="add" data-item-id="'+item.id+'" class="menu-btn w-7 h-7 rounded-full bg-mt flex items-center justify-center text-black font-bold text-lg">+</button></div></div></div></div>';}).join('');
 }
 
-function updateCartBar() {
-  const count = getCartCount();
-  const total = getCartTotal();
-  const totalEl = document.getElementById('cartTotal');
-  const checkoutBtn = document.getElementById('checkoutBtn');
-  if (totalEl) totalEl.textContent = `¥${total.toFixed(2)}`;
-  if (checkoutBtn) {
-    checkoutBtn.disabled = count === 0;
-    if (count === 0) {
-      checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
-    } else {
-      checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-    }
-  }
+document.getElementById('menuList').addEventListener('click',function(e){var btn=e.target.closest('.menu-btn');if(!btn)return;var id=parseInt(btn.dataset.itemId);if(btn.dataset.action==='add')addToCart(id);if(btn.dataset.action==='remove')removeFromCart(id);});
+
+// ===== 结算 =====
+function renderCheckoutItems(){
+  var cartRestoId=state.cart.length>0?state.cart[0].restaurantId:null;
+  var r=restaurants.find(function(x){return x.id===state.currentRestaurantId||x.id===cartRestoId;});
+  if(!r&&cartRestoId)r=restaurants.find(function(x){return x.id===cartRestoId;});
+  if(!r)r=restaurants.find(function(x){return x.id===state.currentRestaurantId;});
+  if(r)state.currentRestaurantId=r.id;
+  document.getElementById('checkoutRestaurant').textContent=r?r.name:'';
+  document.getElementById('checkoutItems').innerHTML=state.cart.length===0?'<div class="text-gray-400 text-sm">暂无商品</div>':state.cart.map(function(item){return'<div class="flex items-center gap-2"><div class="w-8 h-8 rounded bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden"><img src="'+item.foodImg+'" class="food-img" onerror="this.parentElement.innerHTML=\''+item.emoji+'\'"></div><span class="flex-1 truncate dark:text-gray-300">'+item.name+' ×'+item.qty+'</span><span class="text-gray-600 dark:text-gray-400">¥'+(item.price*item.qty).toFixed(2)+'</span></div>';}).join('');
+  var s=getCartTotal(),df=r?parseInt(r.deliveryFee)||0:5,sel=getSelectedCoupon(),disc=sel&&s>=sel.minOrder?sel.discount:0,ft=Math.max(0,s+df-disc);
+  document.getElementById('checkoutSubtotal').textContent='¥'+s.toFixed(2);
+  document.getElementById('checkoutDelivery').textContent=df===0?'免配送费':'¥'+df.toFixed(2);
+  document.getElementById('checkoutTotal').textContent='¥'+ft.toFixed(2);
+  document.getElementById('checkoutETA').textContent=r?'约'+r.deliveryTime+'送达':'约30分钟送达';
+  var dr=document.getElementById('couponDiscountRow');
+  if(disc>0){dr.style.display='flex';document.getElementById('couponDiscount').textContent='-¥'+disc;}else{dr.style.display='none';}
+  document.getElementById('selectedCouponLabel').textContent=sel?'¥'+sel.discount+' '+sel.name:'选择优惠券';
 }
 
-function updateCartBadge() {
-  const count = getCartCount();
-  const badge = document.getElementById('cartCountBadge');
-  const countEl = document.getElementById('cartItemCount');
-  if (badge) {
-    badge.textContent = count;
-    badge.classList.toggle('hidden', count === 0);
-  }
-  if (countEl) {
-    countEl.textContent = count;
-    countEl.classList.toggle('hidden', count === 0);
-  }
+function placeOrder(){
+  if(state.cart.length===0)return;
+  var cartItems=state.cart.map(function(i){return{name:i.name,price:i.price,qty:i.qty,emoji:i.emoji};});
+  var r=restaurants.find(function(x){return x.id===state.cart[0].restaurantId;});
+  if(!r)r=restaurants.find(function(x){return x.id===state.currentRestaurantId;});
+  var df=r?parseInt(r.deliveryFee)||0:5,s=getCartTotal(),sel=getSelectedCoupon(),disc=sel&&s>=sel.minOrder?sel.discount:0,total=Math.max(0,s+df-disc);
+  var order={id:Date.now(),items:cartItems,total:total,status:0,time:new Date().toLocaleString('zh-CN'),restaurantId:r?r.id:null,restaurantName:r?r.name:'',address:getAddress(),coupon:sel,remark:document.getElementById('orderRemark')?document.getElementById('orderRemark').value:''};
+  state.orders.unshift(order);saveOrders();
+  if(sel){var cs=getMyCoupons().filter(function(c){return c.id!==sel.id;});saveUserCoupons(cs);setSelectedCoupon(null);}
+  state.cart=[];refreshUI();renderCouponBanner();
+  navigate('tracking',order.id);
 }
 
-// ========== 购物车抽屉 ==========
-function toggleCart() {
-  const overlay = document.getElementById('cartOverlay');
-  const drawer = document.getElementById('cartDrawer');
-  if (!overlay || !drawer) return;
-
-  const isOpen = !drawer.classList.contains('translate-y-full');
-  if (isOpen) {
-    closeCartDrawer();
-  } else {
-    if (state.cart.length === 0) return;
-    renderCartItems();
-    overlay.classList.remove('hidden');
-    drawer.classList.remove('translate-y-full');
-  }
+// ===== 订单列表 =====
+function renderOrders(){
+  var c=document.getElementById('orderList');if(!c)return;
+  if(state.orders.length===0){c.innerHTML='<div class="text-center py-16"><div class="text-6xl mb-4">📋</div><div class="text-gray-400 dark:text-gray-500">还没有订单</div><button onclick="navigate(\'home\')" class="mt-4 bg-mt text-black font-bold px-6 py-2 rounded-full text-sm btn-press">去点餐</button></div>';return;}
+  var sl=['已下单','商家已接单','骑手已取餐','配送中','已送达'],sc=['text-blue-600 bg-blue-50 dark:bg-blue-900/30','text-yellow-600 bg-yellow-50 dark:bg-yellow-900/30','text-orange-600 bg-orange-50 dark:bg-orange-900/30','text-purple-600 bg-purple-50 dark:bg-purple-900/30','text-green-600 bg-green-50 dark:bg-green-900/30'];
+  c.innerHTML=state.orders.map(function(o){
+    var itemsHtml=(o.items||[]).map(function(it){return(it.name||'商品')+'×'+(it.qty||1);}).join('、');
+    return'<div data-order-id="'+o.id+'" class="order-card bg-white dark:bg-mt-card p-4 rounded-xl border border-gray-100 dark:border-gray-800 cursor-pointer hover:shadow-md"><div class="flex items-center justify-between mb-2"><span class="font-bold dark:text-white">'+o.restaurantName+'</span><span class="text-xs px-2 py-0.5 rounded '+(sc[o.status]||sc[0])+'">'+(sl[o.status]||sl[0])+'</span></div><div class="text-sm text-gray-500 dark:text-gray-400">'+itemsHtml+'</div><div class="flex items-center justify-between mt-2"><span class="text-xs text-gray-400">'+o.time+'</span><span class="font-bold dark:text-white">¥'+(o.total||0).toFixed(2)+'</span></div></div>';
+  }).join('');
 }
 
-function closeCartDrawer() {
-  const overlay = document.getElementById('cartOverlay');
-  const drawer = document.getElementById('cartDrawer');
-  if (overlay) overlay.classList.add('hidden');
-  if (drawer) drawer.classList.add('translate-y-full');
+document.getElementById('orderList').addEventListener('click',function(e){var card=e.target.closest('.order-card');if(!card)return;var id=parseInt(card.dataset.orderId);if(id)navigate('tracking',id);});
+
+// ===== 订单追踪 =====
+function renderTracking(){
+  var order=state.orders.find(function(o){return o.id===state.currentOrderId;});if(!order)return navigate('orders');
+  document.getElementById('trackingETA').textContent=new Date(Date.now()+20*60000).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
+  var steps=[{label:'已下单',desc:order.time,icon:'📝'},{label:'商家接单',desc:'商家正在准备您的餐品',icon:'👨‍🍳'},{label:'骑手取餐',desc:'骑手正在前往商家',icon:'🛵'},{label:'配送中',desc:'骑手正在赶往您的地址',icon:'📍'},{label:'已送达',desc:'祝您用餐愉快！',icon:'✅'}];
+  document.getElementById('trackingSteps').innerHTML=steps.map(function(s,i){return'<div class="status-line relative pl-7 pb-6 '+(i<=order.status?'active':'')+'"><div class="absolute left-0 top-0 w-5 h-5 rounded-full flex items-center justify-center text-xs '+(i<=order.status?'bg-mt text-black':'bg-gray-200 dark:bg-gray-700 text-gray-400')+'">'+(i<order.status?'✓':s.icon)+'</div><div class="font-bold text-sm '+(i<=order.status?'dark:text-white':'text-gray-400 dark:text-gray-600')+'">'+s.label+'</div><div class="text-xs '+(i<=order.status?'text-gray-500 dark:text-gray-400':'text-gray-300 dark:text-gray-600')+'">'+s.desc+'</div></div>';}).join('');
+  if(order.status<4)setTimeout(function(){order.status=Math.min(4,order.status+1);saveOrders();if(state.currentPage==='tracking')renderTracking();},8000);
 }
 
-function renderCartItems() {
-  const container = document.getElementById('cartItems');
-  const subtotal = document.getElementById('cartSubtotal');
-  if (!container) return;
+// ===== 搜索 =====
+document.getElementById('searchInput').addEventListener('input',function(e){state.searchQuery=e.target.value;renderRestaurantList();});
 
-  if (state.cart.length === 0) {
-    container.innerHTML = '<div class="text-center text-gray-400 py-6">购物车是空的</div>';
-  } else {
-    container.innerHTML = state.cart.map(item => `
-      <div class="flex items-center gap-3 py-3 border-b border-gray-50 dark:border-gray-800">
-        <span class="text-2xl">${item.img}</span>
-        <div class="flex-1 min-w-0">
-          <div class="text-sm font-medium dark:text-white truncate">${item.name}</div>
-          <div class="text-xs text-mt font-bold">¥${item.price}</div>
-        </div>
-        <div class="flex items-center gap-2">
-          <button data-action="remove" data-item-id="${item.id}" class="cart-btn w-7 h-7 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-400 text-sm font-bold">−</button>
-          <span class="w-5 text-center text-sm font-bold dark:text-white">${item.qty}</span>
-          <button data-action="add" data-item-id="${item.id}" class="cart-btn w-7 h-7 rounded-full bg-mt flex items-center justify-center text-black font-bold text-sm">+</button>
-        </div>
-      </div>
-    `).join('');
-  }
-  if (subtotal) subtotal.textContent = `¥${getCartTotal().toFixed(2)}`;
-}
+// ===== 分类 =====
+document.querySelectorAll('.cat-btn').forEach(function(btn){btn.addEventListener('click',function(){document.querySelectorAll('.cat-btn').forEach(function(b){b.classList.remove('bg-mt','text-black','font-bold');b.classList.add('bg-gray-100','dark:bg-gray-800','text-gray-600','dark:text-gray-300','font-medium');});this.classList.add('bg-mt','text-black','font-bold');this.classList.remove('bg-gray-100','dark:bg-gray-800','text-gray-600','dark:text-gray-300','font-medium');state.currentCat=this.dataset.cat;renderRestaurantList();});});
 
-// 购物车事件委托
-document.getElementById('cartItems').addEventListener('click', (e) => {
-  const btn = e.target.closest('.cart-btn');
-  if (!btn) return;
-  const itemId = parseInt(btn.dataset.itemId);
-  const action = btn.dataset.action;
-  if (action === 'add') addToCart(itemId);
-  if (action === 'remove') removeFromCart(itemId);
-});
+// ===== 排序 =====
+document.querySelectorAll('.sort-btn').forEach(function(btn){btn.addEventListener('click',function(){document.querySelectorAll('.sort-btn').forEach(function(b){b.classList.remove('bg-mt','text-black','font-bold');b.classList.add('bg-gray-100','dark:bg-gray-800','text-gray-500','dark:text-gray-400','font-medium');});this.classList.add('bg-mt','text-black','font-bold');this.classList.remove('bg-gray-100','dark:bg-gray-800','text-gray-500','dark:text-gray-400','font-medium');state.currentSort=this.dataset.sort;renderRestaurantList();});});
 
-// ========== 路由 ==========
-function navigate(page, data) {
-  if (data !== undefined && page === 'restaurant') state.currentRestaurantId = data;
-  if (data !== undefined && page === 'tracking') state.currentOrderId = data;
+// ===== 客服 =====
+var chatReplies={'投诉':'非常抱歉给您带来不便！请告诉我您的订单号和具体问题，我会立即为您处理。客服热线 10109777。','退款':'退款将在1-3个工作日退回原支付账户。请提供订单号帮您查询。','订单':'请提供订单号或手机号，我帮您查询订单状态~','配送':'江大周边配送通常20-45分钟。后街附近商家30分钟内可达！','优惠':'在"优惠"页面可领取优惠券。新用户首单立减¥15！','推荐':'后街人气王"爱辣啵啵鱼"、排队王"徐州鸡蛋灌饼"、"1点点奶茶"都是江大学生最爱！','开门':'江大后街大部分商家 10:00-22:00 营业，夜宵店至凌晨2:00。','default':'您好！我是智能客服 🤖 您可以问我：推荐美食、配送时间、优惠券、退款、投诉等问题~'};
+function getReply(msg){var keys=Object.keys(chatReplies);for(var i=0;i<keys.length;i++){if(keys[i]!=='default'&&msg.indexOf(keys[i])>-1)return chatReplies[keys[i]];}if(msg.indexOf('投诉')>-1||msg.indexOf('差')>-1)return chatReplies['投诉'];if(msg.indexOf('钱')>-1||msg.indexOf('退')>-1)return chatReplies['退款'];if(msg.indexOf('单')>-1)return chatReplies['订单'];if(msg.indexOf('送')>-1||msg.indexOf('多久')>-1)return chatReplies['配送'];if(msg.indexOf('券')>-1||msg.indexOf('减')>-1)return chatReplies['优惠'];if(msg.indexOf('推荐')>-1||msg.indexOf('好吃')>-1)return chatReplies['推荐'];if(msg.indexOf('营业')>-1||msg.indexOf('开门')>-1)return chatReplies['开门'];return chatReplies['default'];}
+function addChatMsg(text,isUser){var c=document.getElementById('chatMessages'),d=document.createElement('div');d.className='flex '+(isUser?'justify-end':'justify-start')+' animate-pop-in';d.innerHTML=isUser?'<div class="bg-mt text-black rounded-2xl rounded-br-md px-4 py-2.5 max-w-[80%] text-sm">'+text+'</div>':'<div class="flex gap-2 max-w-[85%]"><div class="w-6 h-6 rounded-full bg-mt flex items-center justify-center text-xs flex-shrink-0">🤖</div><div class="bg-gray-100 dark:bg-gray-800 rounded-2xl rounded-bl-md px-4 py-2.5 text-sm dark:text-white">'+text+'</div></div>';c.appendChild(d);c.scrollTop=c.scrollHeight;}
+function sendMsg(){var inp=document.getElementById('chatInput'),text=inp.value.trim();if(!text)return;addChatMsg(text,true);inp.value='';setTimeout(function(){addChatMsg(getReply(text),false);},600);}
+function sendQuickReply(text){document.getElementById('chatInput').value=text;sendMsg();}
+function toggleChat(){var o=document.getElementById('chatOverlay'),w=document.getElementById('chatWindow');if(!o||!w)return;if(!w.classList.contains('translate-y-full')){o.classList.add('hidden');w.classList.add('translate-y-full');}else{o.classList.remove('hidden');w.classList.remove('translate-y-full');var m=document.getElementById('chatMessages');if(m.children.length===0){addChatMsg('您好！我是美团智能客服 🤖',false);addChatMsg('您可以问我：推荐美食、配送时间、优惠券、退款、投诉等~',false);}}}
 
-  state.currentPage = page;
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+// ===== 深色模式 =====
+function toggleDark(){document.documentElement.classList.toggle('dark');localStorage.setItem('mt_dark',document.documentElement.classList.contains('dark'));}
+if(localStorage.getItem('mt_dark')==='true')document.documentElement.classList.add('dark');
 
-  switch (page) {
-    case 'home':
-      document.getElementById('page-home').classList.add('active');
-      renderRestaurantList();
-      break;
-    case 'restaurant':
-      document.getElementById('page-restaurant').classList.add('active');
-      renderRestaurantDetail();
-      break;
-    case 'checkout':
-      if (state.cart.length === 0) { navigate('restaurant'); return; }
-      document.getElementById('page-checkout').classList.add('active');
-      renderCheckoutItems();
-      break;
-    case 'tracking':
-      document.getElementById('page-tracking').classList.add('active');
-      renderTracking();
-      break;
-    case 'orders':
-      document.getElementById('page-orders').classList.add('active');
-      renderOrders();
-      break;
-  }
-  updateNavHighlight();
-  window.scrollTo(0, 0);
-}
+// ===== 个人资料 =====
+function getProfile(){var s=localStorage.getItem('mt_profile');if(s)try{return JSON.parse(s)}catch(e){}return{nickname:'',phone:'',gender:'secret',bio:'',avatar:''};}
+function saveProfileToStorage(p){localStorage.setItem('mt_profile',JSON.stringify(p));}
+function showProfileModal(){var p=getProfile();document.getElementById('profileNickname').value=p.nickname;document.getElementById('profilePhoneNum').value=p.phone;document.getElementById('profileBio').value=p.bio||'';document.getElementById('profileEditEmoji').textContent=p.avatar||'😊';state.profileGender=p.gender||'secret';document.querySelectorAll('.gender-btn').forEach(function(b){b.classList.remove('bg-mt','text-black');b.classList.add('bg-gray-100','dark:bg-gray-800','dark:text-white');if(b.dataset.gender===state.profileGender){b.classList.add('bg-mt','text-black');b.classList.remove('bg-gray-100','dark:bg-gray-800','dark:text-white');}});document.getElementById('profileOverlay').classList.remove('hidden');document.getElementById('profileModal').classList.remove('translate-y-full');}
+function closeProfileModal(){document.getElementById('profileOverlay').classList.add('hidden');document.getElementById('profileModal').classList.add('translate-y-full');}
+function selectGender(g,el){state.profileGender=g;document.querySelectorAll('.gender-btn').forEach(function(b){b.classList.remove('bg-mt','text-black');b.classList.add('bg-gray-100','dark:bg-gray-800','dark:text-white');});el.classList.add('bg-mt','text-black');el.classList.remove('bg-gray-100','dark:bg-gray-800','dark:text-white');}
+function previewAvatar(e){var file=e.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(ev){state.profileAvatarData=ev.target.result;document.getElementById('profileEditEmoji').textContent='🖼️';};reader.readAsDataURL(file);}
+function saveProfile(){var p={nickname:document.getElementById('profileNickname').value.trim(),phone:document.getElementById('profilePhoneNum').value.trim(),gender:state.profileGender||'secret',bio:document.getElementById('profileBio').value.trim(),avatar:state.profileAvatarData||getProfile().avatar||''};saveProfileToStorage(p);renderProfile();closeProfileModal();}
+function renderProfile(){var p=getProfile();document.getElementById('profileName').textContent=p.nickname||'点击设置昵称';document.getElementById('profilePhone').textContent=p.phone||'绑定手机号';if(p.avatar){document.getElementById('profileAvatarImg').src=p.avatar;document.getElementById('profileAvatarImg').classList.remove('hidden');document.getElementById('profileAvatarEmoji').classList.add('hidden');}else{document.getElementById('profileAvatarImg').classList.add('hidden');document.getElementById('profileAvatarEmoji').classList.remove('hidden');}document.getElementById('profileOrderCount').textContent=state.orders.length;document.getElementById('profileCouponCount').textContent=getMyCoupons().length;var saved=state.orders.reduce(function(s,o){return s+(o.coupon?o.coupon.discount:0);},0);document.getElementById('profileSaved').textContent='¥'+saved;}
 
-function updateNavHighlight() {
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    const page = btn.dataset.page;
-    const active = page === state.currentPage ||
-      (['restaurant', 'checkout'].includes(state.currentPage) && page === 'home') ||
-      (state.currentPage === 'tracking' && page === 'orders');
-    if (active) {
-      btn.classList.add('text-mt');
-      btn.classList.remove('text-gray-400', 'dark:text-gray-500');
-    } else {
-      btn.classList.remove('text-mt');
-      btn.classList.add('text-gray-400', 'dark:text-gray-500');
-    }
-  });
-}
+// ===== Toast =====
+var toastTimer=null;
+function showToast(text){var el=document.getElementById('toast');if(!el)return;if(toastTimer){clearTimeout(toastTimer);el.classList.remove('toast-hide');}el.innerHTML='<div class="bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-4 py-2.5 rounded-full text-sm font-bold shadow-lg whitespace-nowrap toast-show">'+text+'</div>';toastTimer=setTimeout(function(){var div=el.querySelector('div');if(div){div.classList.add('toast-hide');div.classList.remove('toast-show');}toastTimer=null;},1500);}
 
-// ========== 首页 ==========
-function renderRestaurantList() {
-  const container = document.getElementById('restaurantList');
-  if (!container) return;
-
-  let filtered = restaurants.slice();
-  if (state.currentCat !== 'all') {
-    filtered = filtered.filter(r => r.category === state.currentCat);
-  }
-  if (state.searchQuery) {
-    const q = state.searchQuery.toLowerCase();
-    filtered = filtered.filter(r => r.name.toLowerCase().includes(q) || r.category.toLowerCase().includes(q));
-  }
-  filtered.sort((a, b) => {
-    if (state.currentSort === 'rating') return b.rating - a.rating;
-    if (state.currentSort === 'sales') return b.monthlySales - a.monthlySales;
-    if (state.currentSort === 'time') return parseInt(a.deliveryTime) - parseInt(b.deliveryTime);
-    return 0;
-  });
-
-  container.innerHTML = filtered.length ? filtered.map(r => `
-    <div data-restaurant-id="${r.id}" class="restaurant-card bg-white dark:bg-mt-card rounded-xl overflow-hidden border border-gray-100 dark:border-gray-800 cursor-pointer hover:shadow-md transition-shadow active:scale-[0.98]">
-      <div class="${r.cover} h-32 relative flex items-center justify-center text-5xl">
-        <span>${r.emoji}</span>
-        <div class="absolute top-2 left-2 flex gap-1">
-          ${r.tags.map(t => `<span class="bg-black/30 backdrop-blur text-white text-xs px-2 py-0.5 rounded-full">${t}</span>`).join('')}
-        </div>
-        <div class="absolute bottom-2 right-2 bg-black/40 backdrop-blur text-white text-xs px-2 py-0.5 rounded-full">${r.deliveryTime}</div>
-      </div>
-      <div class="p-3">
-        <div class="flex items-center justify-between">
-          <h3 class="font-bold dark:text-white truncate">${r.name}</h3>
-          <span class="text-xs text-green-600 bg-green-50 dark:bg-green-900/30 dark:text-green-400 px-1.5 py-0.5 rounded whitespace-nowrap">${r.deliveryFee}</span>
-        </div>
-        <div class="flex items-center gap-2 mt-1">
-          <span class="text-yellow-500 text-xs">★ ${r.rating}</span>
-          <span class="text-gray-400 text-xs">月售${r.monthlySales}</span>
-        </div>
-        <div class="text-xs text-gray-400 mt-1">起送¥${r.minPrice}</div>
-      </div>
-    </div>
-  `).join('') : '<div class="text-center text-gray-400 py-16">没有找到商家</div>';
-}
-
-// 商家卡片点击委托
-document.getElementById('restaurantList').addEventListener('click', (e) => {
-  const card = e.target.closest('.restaurant-card');
-  if (!card) return;
-  const id = parseInt(card.dataset.restaurantId);
-  if (id) navigate('restaurant', id);
-});
-
-// ========== 商家详情 ==========
-function renderRestaurantDetail() {
-  const r = restaurants.find(r => r.id === state.currentRestaurantId);
-  if (!r) return navigate('home');
-
-  document.getElementById('restoName').textContent = r.name;
-  document.getElementById('restoHeader').className = `${r.cover} h-44 relative flex items-center justify-center text-7xl`;
-  document.getElementById('restoHeader').innerHTML = `<span>${r.emoji}</span>`;
-  document.getElementById('restoTitle').textContent = r.name;
-  document.getElementById('restoRating').textContent = `${r.rating} 分`;
-  document.getElementById('restoSales').textContent = r.monthlySales;
-  document.getElementById('restoTime').textContent = r.deliveryTime;
-  document.getElementById('restoFee').textContent = r.deliveryFee;
-  document.getElementById('restoMin').textContent = r.minPrice;
-
-  // 菜单分类tabs
-  const tabs = document.getElementById('menuTabs');
-  state.menuCat = r.menu[0].cat;
-  tabs.innerHTML = r.menu.map((cat, i) =>
-    `<button data-cat="${cat.cat}" class="menu-tab flex-1 text-center py-2.5 text-xs font-medium border-b-2 whitespace-nowrap px-3 transition-colors ${i === 0 ? 'border-mt text-mt' : 'border-transparent text-gray-500 dark:text-gray-400'}">${cat.cat}</button>`
-  ).join('');
-
-  renderMenuItems();
-  updateCartBar();
-}
-
-// 菜单tab点击委托
-document.getElementById('menuTabs').addEventListener('click', (e) => {
-  const tab = e.target.closest('.menu-tab');
-  if (!tab) return;
-  const cat = tab.dataset.cat;
-  state.menuCat = cat;
-  document.querySelectorAll('.menu-tab').forEach(t => {
-    t.classList.remove('border-mt', 'text-mt');
-    t.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
-  });
-  tab.classList.add('border-mt', 'text-mt');
-  tab.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
-  renderMenuItems();
-});
-
-function renderMenuItems() {
-  const r = restaurants.find(r => r.id === state.currentRestaurantId);
-  if (!r) return;
-  const category = r.menu.find(c => c.cat === state.menuCat);
-  if (!category) { state.menuCat = r.menu[0].cat; return renderMenuItems(); }
-
-  const container = document.getElementById('menuList');
-  container.innerHTML = `
-    <div class="text-sm font-bold text-gray-400 dark:text-gray-500 mb-2">${state.menuCat}</div>
-    ${category.items.map(item => {
-      const cartItem = getCartItem(item.id);
-      const qty = cartItem ? cartItem.qty : 0;
-      return `
-      <div class="flex gap-3 py-3 border-b border-gray-50 dark:border-gray-800">
-        <div class="w-20 h-20 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-4xl flex-shrink-0">${item.img}</div>
-        <div class="flex-1 min-w-0">
-          <div class="text-sm font-bold dark:text-white">${item.name}</div>
-          <div class="text-xs text-gray-400 mt-0.5 line-clamp-2">${item.desc}</div>
-          <div class="text-xs text-gray-400 mt-1">月售${item.sales}</div>
-          <div class="flex items-center justify-between mt-1.5">
-            <span class="text-mt font-bold text-base">¥${item.price}</span>
-            <div class="flex items-center gap-2">
-              ${qty > 0 ? `
-                <button data-action="remove" data-item-id="${item.id}" class="menu-btn w-7 h-7 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-400 text-sm font-bold">−</button>
-                <span class="text-sm font-bold dark:text-white w-4 text-center">${qty}</span>
-              ` : ''}
-              <button data-action="add" data-item-id="${item.id}" class="menu-btn w-7 h-7 rounded-full bg-mt flex items-center justify-center text-black font-bold text-lg">+</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    `}).join('')}
-  `;
-}
-
-// 菜单加减按钮委托
-document.getElementById('menuList').addEventListener('click', (e) => {
-  const btn = e.target.closest('.menu-btn');
-  if (!btn) return;
-  e.stopPropagation();
-  const itemId = parseInt(btn.dataset.itemId);
-  const action = btn.dataset.action;
-  if (action === 'add') addToCart(itemId);
-  if (action === 'remove') removeFromCart(itemId);
-});
-
-// ========== 结算 ==========
-function renderCheckoutItems() {
-  const container = document.getElementById('checkoutItems');
-  const subtotal = document.getElementById('checkoutSubtotal');
-  const total = document.getElementById('checkoutTotal');
-  if (!container) return;
-
-  if (state.cart.length === 0) {
-    container.innerHTML = '<div class="text-gray-400 text-sm">暂无商品</div>';
-  } else {
-    container.innerHTML = state.cart.map(item => `
-      <div class="flex items-center gap-2">
-        <span>${item.img}</span>
-        <span class="flex-1 truncate dark:text-gray-300">${item.name} ×${item.qty}</span>
-        <span class="text-gray-600 dark:text-gray-400">¥${(item.price * item.qty).toFixed(2)}</span>
-      </div>
-    `).join('');
-  }
-
-  const s = getCartTotal();
-  if (subtotal) subtotal.textContent = `¥${s.toFixed(2)}`;
-  if (total) total.textContent = `¥${(s + 5).toFixed(2)}`;
-}
-
-function placeOrder() {
-  if (state.cart.length === 0) return;
-
-  const order = {
-    id: Date.now(),
-    items: state.cart.map(i => ({ ...i })),
-    total: getCartTotal() + 5,
-    status: 0,
-    time: new Date().toLocaleString('zh-CN'),
-    restaurantId: state.currentRestaurantId,
-    restaurantName: restaurants.find(r => r.id === state.currentRestaurantId)?.name || '',
-  };
-
-  state.orders.unshift(order);
-  saveOrders();
-  state.cart = [];
-  refreshUI();
-  navigate('tracking', order.id);
-}
-
-// ========== 订单列表 ==========
-function renderOrders() {
-  const container = document.getElementById('orderList');
-  if (!container) return;
-
-  if (state.orders.length === 0) {
-    container.innerHTML = `
-      <div class="text-center py-16">
-        <div class="text-6xl mb-4">📋</div>
-        <div class="text-gray-400 dark:text-gray-500">还没有订单</div>
-        <button onclick="navigate('home')" class="mt-4 bg-mt text-black font-bold px-6 py-2 rounded-full text-sm btn-press">去点餐</button>
-      </div>`;
-    return;
-  }
-
-  const statusLabels = ['已下单', '商家已接单', '骑手已取餐', '配送中', '已送达'];
-  const statusColors = ['text-blue-600 bg-blue-50 dark:bg-blue-900/30', 'text-yellow-600 bg-yellow-50 dark:bg-yellow-900/30', 'text-orange-600 bg-orange-50 dark:bg-orange-900/30', 'text-purple-600 bg-purple-50 dark:bg-purple-900/30', 'text-green-600 bg-green-50 dark:bg-green-900/30'];
-
-  container.innerHTML = state.orders.map(o => `
-    <div data-order-id="${o.id}" class="order-card bg-white dark:bg-mt-card p-4 rounded-xl border border-gray-100 dark:border-gray-800 cursor-pointer hover:shadow-md transition-shadow active:scale-[0.98]">
-      <div class="flex items-center justify-between mb-2">
-        <span class="font-bold dark:text-white">${o.restaurantName}</span>
-        <span class="text-xs px-2 py-0.5 rounded ${statusColors[o.status] || statusColors[0]}">${statusLabels[o.status] || statusLabels[0]}</span>
-      </div>
-      <div class="text-sm text-gray-500 dark:text-gray-400">
-        ${o.items.map(i => `${i.name} ×${i.qty}`).join('、')}
-      </div>
-      <div class="flex items-center justify-between mt-2">
-        <span class="text-xs text-gray-400">${o.time}</span>
-        <span class="font-bold dark:text-white">¥${o.total.toFixed(2)}</span>
-      </div>
-    </div>
-  `).join('');
-}
-
-// 订单卡片点击委托
-document.getElementById('orderList').addEventListener('click', (e) => {
-  const card = e.target.closest('.order-card');
-  if (!card) return;
-  const id = parseInt(card.dataset.orderId);
-  if (id) navigate('tracking', id);
-});
-
-// ========== 订单追踪 ==========
-function renderTracking() {
-  const order = state.orders.find(o => o.id === state.currentOrderId);
-  if (!order) return navigate('orders');
-
-  const eta = new Date(Date.now() + 20 * 60000);
-  document.getElementById('trackingETA').textContent = eta.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
-
-  const steps = [
-    { label: '已下单', desc: order.time, icon: '📝' },
-    { label: '商家接单', desc: '商家正在准备您的餐品', icon: '👨‍🍳' },
-    { label: '骑手取餐', desc: '骑手正在前往商家', icon: '🛵' },
-    { label: '配送中', desc: '骑手正在赶往您的地址', icon: '📍' },
-    { label: '已送达', desc: '祝您用餐愉快！', icon: '✅' },
-  ];
-
-  document.getElementById('trackingSteps').innerHTML = steps.map((s, i) => `
-    <div class="status-line relative pl-7 pb-6 ${i <= order.status ? 'active' : ''}">
-      <div class="absolute left-0 top-0 w-5 h-5 rounded-full flex items-center justify-center text-xs ${i <= order.status ? 'bg-mt' : 'bg-gray-200 dark:bg-gray-700'}">${i < order.status ? '✓' : s.icon}</div>
-      <div class="font-bold text-sm ${i <= order.status ? 'dark:text-white' : 'text-gray-400 dark:text-gray-600'}">${s.label}</div>
-      <div class="text-xs ${i <= order.status ? 'text-gray-500 dark:text-gray-400' : 'text-gray-300 dark:text-gray-600'}">${s.desc}</div>
-    </div>
-  `).join('');
-
-  if (order.status < 4) {
-    setTimeout(() => {
-      order.status = Math.min(4, order.status + 1);
-      saveOrders();
-      if (state.currentPage === 'tracking') renderTracking();
-    }, 10000);
-  }
-}
-
-// ========== 搜索 ==========
-document.getElementById('searchInput').addEventListener('input', (e) => {
-  state.searchQuery = e.target.value;
-  renderRestaurantList();
-});
-
-// ========== 分类 ==========
-document.querySelectorAll('.cat-btn').forEach(btn => {
-  btn.addEventListener('click', function () {
-    document.querySelectorAll('.cat-btn').forEach(b => {
-      b.classList.remove('bg-mt', 'text-black');
-      b.classList.add('bg-gray-100', 'dark:bg-gray-800', 'text-gray-600', 'dark:text-gray-300');
-    });
-    this.classList.add('bg-mt', 'text-black');
-    this.classList.remove('bg-gray-100', 'dark:bg-gray-800', 'text-gray-600', 'dark:text-gray-300');
-    state.currentCat = this.dataset.cat;
-    renderRestaurantList();
-  });
-});
-
-// ========== 排序 ==========
-document.querySelectorAll('.sort-btn').forEach(btn => {
-  btn.addEventListener('click', function () {
-    document.querySelectorAll('.sort-btn').forEach(b => {
-      b.classList.remove('bg-mt', 'text-black');
-      b.classList.add('bg-gray-100', 'dark:bg-gray-800', 'text-gray-500', 'dark:text-gray-400');
-    });
-    this.classList.add('bg-mt', 'text-black');
-    this.classList.remove('bg-gray-100', 'dark:bg-gray-800', 'text-gray-500', 'dark:text-gray-400');
-    state.currentSort = this.dataset.sort;
-    renderRestaurantList();
-  });
-});
-
-// ========== 返回按钮 ==========
-document.querySelectorAll('[data-back]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const page = btn.dataset.back;
-    if (page === 'home') navigate('home');
-    if (page === 'restaurant') navigate('restaurant');
-    if (page === 'orders') navigate('orders');
-  });
-});
-
-// ========== 深色模式 ==========
-function toggleDark() {
-  document.documentElement.classList.toggle('dark');
-  localStorage.setItem('mt_dark', document.documentElement.classList.contains('dark'));
-}
-if (localStorage.getItem('mt_dark') === 'true') {
-  document.documentElement.classList.add('dark');
-}
-
-// ========== 启动 ==========
-function init() {
-  renderRestaurantList();
-  updateNavHighlight();
-  updateCartBadge();
-}
+// ===== 启动 =====
+function init(){renderRestaurantList();renderRecommend();renderCouponBanner();updateNavHighlight();updateAddressDisplay();updateAllBadges();document.getElementById('cartBar').style.display='none';}
 init();
-
 </script>
-</body>
-</html>
+</body></html>
